@@ -1,16 +1,25 @@
-# Mantine React Table
+# Mantine React Table Open
+
+> **Unofficial fork** of [mantine-react-table](https://github.com/KevinVandy/mantine-react-table) that provides support for Mantine V8 & V9.
 
 View the [Docs Site](https://www.mantine-react-table.com/)
-
-A fork of [Material React Table](https://www.material-react-table.com)
 
 ## About
 
 ### _Quickly Create React Data Tables with Mantine_
 
-### __Built with [Mantine <sup>V8</sup>](https://mantine.dev/) and [TanStack Table <sup>V8</sup>](https://tanstack.com/table/v8)__
+### __Built with [Mantine <sup>V8 & V9</sup>](https://mantine.dev/) and [TanStack Table <sup>V8</sup>](https://tanstack.com/table/v8)__
 
 <img src="https://mantine-react-table.com/banner.png" alt="MRT" height="50"/>
+
+## Mantine Version Compatibility
+
+| mantine-react-table-open | Mantine | React |
+| --- | --- | --- |
+| v9.x (`latest`) | Mantine V9 | React 19+ |
+| v8.x | Mantine V8 | React 18+ |
+
+Use `npm install mantine-react-table-open@^8` to install the Mantine V8 compatible version.
 
 ## Learn More
 
@@ -79,18 +88,36 @@ _**Fully Fleshed out [Docs](https://www.mantine-react-table.com/docs/guides#guid
 
 View the full [Installation Docs](https://www.mantine-react-table.com/docs/getting-started/install)
 
-1. Ensure that you have React 18 or later installed
+#### For Mantine V9 (latest)
 
-2. Install Peer Dependencies (Mantine V8 and Tabler Icons)
+1. Ensure that you have React 19 or later installed
+
+2. Install Peer Dependencies (Mantine V9 and Tabler Icons)
 
 ```bash
-npm install @mantine/core @mantine/hooks @mantine/dates @emotion/react @tabler/icons-react dayjs
+npm install @mantine/core @mantine/hooks @mantine/dates @tabler/icons-react dayjs
 ```
 
 3. Install mantine-react-table-open
 
 ```bash
 npm install mantine-react-table-open
+```
+
+#### For Mantine V8
+
+1. Ensure that you have React 18 or later installed
+
+2. Install Peer Dependencies (Mantine V8 and Tabler Icons)
+
+```bash
+npm install @mantine/core@8 @mantine/hooks@8 @mantine/dates@8 @tabler/icons-react dayjs
+```
+
+3. Install mantine-react-table-open v8
+
+```bash
+npm install mantine-react-table-open@^8
 ```
 
 > _`@tanstack/react-table`, `@tanstack/react-virtual`, `@tanstack/match-sorter-utils`,_ are internal dependencies, so you do NOT need to install them yourself.
@@ -101,7 +128,7 @@ npm install mantine-react-table-open
 
 ```jsx
 import { useMemo, useState, useEffect } from 'react';
-import { MantineReactTable, useMantineReactTable } from 'mantine-react-table';
+import { MantineReactTable, useMantineReactTable } from 'mantine-react-table-open';
 
 const data = [
   {
