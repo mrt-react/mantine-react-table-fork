@@ -15,7 +15,7 @@ export const getMRT_RowDragColumnDef = <TData extends MRT_RowData>(
     Cell: ({ row, rowRef, table }) => (
       <MRT_TableBodyRowGrabHandle
         row={row}
-        rowRef={rowRef as RefObject<HTMLTableRowElement>}
+        rowRef={rowRef as RefObject<HTMLTableRowElement | null>}
         table={table}
       />
     ),

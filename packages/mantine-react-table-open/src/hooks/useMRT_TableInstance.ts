@@ -56,16 +56,16 @@ export const useMRT_TableInstance = <TData extends MRT_RowData>(
   definedTableOptions: MRT_DefinedTableOptions<TData>,
 ): MRT_TableInstance<TData> => {
   const lastSelectedRowId = useRef<null | string>(null);
-  const bottomToolbarRef = useRef<HTMLDivElement>(null);
+  const bottomToolbarRef = useRef<HTMLDivElement | null>(null);
   const editInputRefs = useRef<Record<string, HTMLInputElement>>({});
   const filterInputRefs = useRef<Record<string, HTMLInputElement>>({});
-  const searchInputRef = useRef<HTMLInputElement>(null);
-  const tableContainerRef = useRef<HTMLDivElement>(null);
+  const searchInputRef = useRef<HTMLInputElement | null>(null);
+  const tableContainerRef = useRef<HTMLDivElement | null>(null);
   const tableHeadCellRefs = useRef<Record<string, HTMLTableCellElement>>({});
-  const tablePaperRef = useRef<HTMLDivElement>(null);
-  const topToolbarRef = useRef<HTMLDivElement>(null);
-  const tableHeadRef = useRef<HTMLTableSectionElement>(null);
-  const tableFooterRef = useRef<HTMLTableSectionElement>(null);
+  const tablePaperRef = useRef<HTMLDivElement | null>(null);
+  const topToolbarRef = useRef<HTMLDivElement | null>(null);
+  const tableHeadRef = useRef<HTMLTableSectionElement | null>(null);
+  const tableFooterRef = useRef<HTMLTableSectionElement | null>(null);
 
   //transform initial state with proper column order
   const initialState: Partial<MRT_TableState<TData>> = useMemo(() => {

@@ -77,7 +77,7 @@ export const MRT_GlobalFilterTextInput = <TData extends MRT_RowData>({
   }, [globalFilter]);
 
   return (
-    <Collapse className={classes.collapse} in={showGlobalFilter}>
+    <Collapse className={classes.collapse} expanded={showGlobalFilter}>
       {enableGlobalFilterModes && (
         <Menu withinPortal>
           <Menu.Target>

@@ -118,7 +118,7 @@ export const MRT_ToolbarAlertBanner = <TData extends MRT_RowData>({
 
   return (
     <Collapse
-      in={showAlertBanner || !!selectedAlert || !!groupedAlert}
+      expanded={showAlertBanner || !!selectedAlert || !!groupedAlert}
       transitionDuration={stackAlertBanner ? 200 : 0}
     >
       <Alert

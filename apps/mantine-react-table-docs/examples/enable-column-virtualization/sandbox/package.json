@@ -10,9 +10,9 @@
   },
   "dependencies": {
     "@faker-js/faker": "^9.8.0",
-    "@mantine/core": "^8.0.2",
-    "@mantine/dates": "^8.0.2",
-    "@mantine/hooks": "^8.0.2",
+    "@mantine/core": "^9.0.0",
+    "@mantine/dates": "^9.0.0",
+    "@mantine/hooks": "^9.0.0",
     "@tabler/icons-react": "3.33.0",
     "clsx": "^2.1.1",
     "dayjs": "^1.11.13",

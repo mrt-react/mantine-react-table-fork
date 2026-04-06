@@ -305,7 +305,7 @@ export const MRT_FilterTextInput = <TData extends MRT_RowData>({
           if (node) {
             filterInputRefs.current[`${column.id}-${rangeFilterIndex ?? 0}`] =
               node;
-            if (multiSelectProps.ref) {
+            if (multiSelectProps.ref && typeof multiSelectProps.ref !== 'function') {
               multiSelectProps.ref.current = node;
             }
           }
@@ -336,7 +336,7 @@ export const MRT_FilterTextInput = <TData extends MRT_RowData>({
           if (node) {
             filterInputRefs.current[`${column.id}-${rangeFilterIndex ?? 0}`] =
               node;
-            if (selectProps.ref) {
+            if (selectProps.ref && typeof selectProps.ref !== 'function') {
               selectProps.ref.current = node;
             }
           }
@@ -360,7 +360,7 @@ export const MRT_FilterTextInput = <TData extends MRT_RowData>({
           if (node) {
             filterInputRefs.current[`${column.id}-${rangeFilterIndex ?? 0}`] =
               node;
-            if (dateInputProps.ref) {
+            if (dateInputProps.ref && typeof dateInputProps.ref !== 'function') {
               dateInputProps.ref.current = node;
             }
           }
@@ -383,7 +383,7 @@ export const MRT_FilterTextInput = <TData extends MRT_RowData>({
           if (node) {
             filterInputRefs.current[`${column.id}-${rangeFilterIndex ?? 0}`] =
               node;
-            if (autoCompleteProps.ref) {
+            if (autoCompleteProps.ref && typeof autoCompleteProps.ref !== 'function') {
               autoCompleteProps.ref.current = node;
             }
           }
@@ -405,7 +405,7 @@ export const MRT_FilterTextInput = <TData extends MRT_RowData>({
         if (node) {
           filterInputRefs.current[`${column.id}-${rangeFilterIndex ?? 0}`] =
             node;
-          if (textInputProps.ref) {
+          if (textInputProps.ref && typeof textInputProps.ref !== 'function') {
             textInputProps.ref.current = node;
           }
         }

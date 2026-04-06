@@ -5,8 +5,8 @@ import classes from './MRT_TableHeadCell.module.css';
 import {
   type CSSProperties,
   type DragEventHandler,
-  type MutableRefObject,
   type ReactNode,
+  type RefObject,
   useMemo,
   useState,
 } from 'react';
@@ -212,7 +212,7 @@ export const MRT_TableHeadCell = <TData extends MRT_RowData>({
             isHoveredHeadCellRef(node);
           } else if (isHoveredHeadCellRef) {
             (
-              isHoveredHeadCellRef as MutableRefObject<HTMLTableCellElement | null>
+              isHoveredHeadCellRef as RefObject<HTMLTableCellElement | null>
             ).current = node;
           }
 

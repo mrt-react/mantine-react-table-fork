@@ -40,7 +40,7 @@ interface Props<TData extends MRT_RowData, TValue = MRT_CellValue>
   numRows?: number;
   renderedColumnIndex?: number;
   renderedRowIndex?: number;
-  rowRef: RefObject<HTMLTableRowElement>;
+  rowRef: RefObject<HTMLTableRowElement | null>;
   table: MRT_TableInstance<TData>;
   virtualCell?: MRT_VirtualItem;
 }

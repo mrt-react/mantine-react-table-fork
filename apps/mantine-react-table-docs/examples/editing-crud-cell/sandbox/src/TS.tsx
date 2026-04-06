@@ -212,7 +212,7 @@ const Example = () => {
           Save
         </Button>
         {Object.values(validationErrors).some((error) => !!error) && (
-          <Text color="red">Fix errors before submitting</Text>
+          <Text c="red">Fix errors before submitting</Text>
         )}
       </Flex>
     ),

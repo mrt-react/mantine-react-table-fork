@@ -10,10 +10,10 @@
     "start": "vite"
   },
   "dependencies": {
-    "@mantine/core": "^8.0.2",
-    "@mantine/dates": "^8.0.2",
-    "@mantine/hooks": "^8.0.2",
-    "@mantine/modals": "^8.0.2",
+    "@mantine/core": "^9.0.0",
+    "@mantine/dates": "^9.0.0",
+    "@mantine/hooks": "^9.0.0",
+    "@mantine/modals": "^9.0.0",
     "@tabler/icons-react": "3.33.0",
     "dayjs": "^1.11.13",
     "mantine-react-table-open": "^2.0.0-beta.9",

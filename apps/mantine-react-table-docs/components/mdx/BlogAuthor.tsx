@@ -38,7 +38,7 @@ export const BlogAuthor = ({
           style={{ borderRadius: '50%' }}
         />
       </Box>
-      <Text color="gray">
+      <Text c="gray">
         Published: <i>{new Date(publishDate).toLocaleDateString()}</i>
       </Text>
     </Stack>

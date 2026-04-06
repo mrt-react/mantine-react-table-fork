@@ -144,7 +144,7 @@ const StateOptionsTable = ({ onlyOptions }: Props) => {
       }}
       positionGlobalFilter="left"
       renderDetailPanel={({ row }) => (
-        <Text color={row.original.description ? 'teal' : 'gray'}>
+        <Text c={row.original.description ? 'teal' : 'gray'}>
           {row.original.description || 'No Description Provided... Yet...'}
         </Text>
       )}

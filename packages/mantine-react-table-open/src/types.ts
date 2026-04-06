@@ -287,17 +287,17 @@ export type MRT_TableInstance<TData extends MRT_RowData> = {
   getTopRows: () => MRT_Row<TData>[];
   options: MRT_StatefulTableOptions<TData>;
   refs: {
-    bottomToolbarRef: MutableRefObject<HTMLDivElement | null>;
-    editInputRefs: MutableRefObject<Record<string, HTMLInputElement>>;
-    filterInputRefs: MutableRefObject<Record<string, HTMLInputElement>>;
-    lastSelectedRowId: MutableRefObject<null | string>;
-    searchInputRef: MutableRefObject<HTMLInputElement | null>;
-    tableContainerRef: MutableRefObject<HTMLDivElement | null>;
-    tableFooterRef: MutableRefObject<HTMLTableSectionElement | null>;
-    tableHeadCellRefs: MutableRefObject<Record<string, HTMLTableCellElement>>;
-    tableHeadRef: MutableRefObject<HTMLTableSectionElement | null>;
-    tablePaperRef: MutableRefObject<HTMLDivElement | null>;
-    topToolbarRef: MutableRefObject<HTMLDivElement | null>;
+    bottomToolbarRef: RefObject<HTMLDivElement | null>;
+    editInputRefs: RefObject<Record<string, HTMLInputElement>>;
+    filterInputRefs: RefObject<Record<string, HTMLInputElement>>;
+    lastSelectedRowId: RefObject<null | string>;
+    searchInputRef: RefObject<HTMLInputElement | null>;
+    tableContainerRef: RefObject<HTMLDivElement | null>;
+    tableFooterRef: RefObject<HTMLTableSectionElement | null>;
+    tableHeadCellRefs: RefObject<Record<string, HTMLTableCellElement>>;
+    tableHeadRef: RefObject<HTMLTableSectionElement | null>;
+    tablePaperRef: RefObject<HTMLDivElement | null>;
+    topToolbarRef: RefObject<HTMLDivElement | null>;
   };
   setColumnFilterFns: Dispatch<SetStateAction<MRT_ColumnFilterFnsState>>;
   setCreatingRow: Dispatch<SetStateAction<MRT_Row<TData> | null | true>>;
@@ -424,7 +424,7 @@ export type MRT_ColumnDef<TData extends MRT_RowData, TValue = unknown> = {
     renderedColumnIndex?: number;
     renderedRowIndex?: number;
     row: MRT_Row<TData>;
-    rowRef?: RefObject<HTMLTableRowElement>;
+    rowRef?: RefObject<HTMLTableRowElement | null>;
     table: MRT_TableInstance<TData>;
   }) => ReactNode;
   /**

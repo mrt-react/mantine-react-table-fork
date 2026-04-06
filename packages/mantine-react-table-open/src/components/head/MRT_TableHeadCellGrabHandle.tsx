@@ -16,7 +16,7 @@ interface Props<TData extends MRT_RowData, TValue = MRT_CellValue>
   extends ActionIconProps {
   column: MRT_Column<TData, TValue>;
   table: MRT_TableInstance<TData>;
-  tableHeadCellRef: RefObject<HTMLTableCellElement>;
+  tableHeadCellRef: RefObject<HTMLTableCellElement | null>;
 }
 
 export const MRT_TableHeadCellGrabHandle = <TData extends MRT_RowData>({

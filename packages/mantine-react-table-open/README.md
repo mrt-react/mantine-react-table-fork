@@ -79,18 +79,18 @@ _**Fully Fleshed out [Docs](https://www.mantine-react-table.com/docs/guides#guid
 
 View the full [Installation Docs](https://www.mantine-react-table.com/docs/getting-started/install)
 
-1. Ensure that you have React 17 or later installed
+1. Ensure that you have React 18 or later installed
 
-2. Install Peer Dependencies (Mantine V6 and Tabler Icons)
+2. Install Peer Dependencies (Mantine V8 and Tabler Icons)
 
 ```bash
 npm install @mantine/core @mantine/hooks @mantine/dates @emotion/react @tabler/icons-react dayjs
 ```
 
-3. Install mantine-react-table
+3. Install mantine-react-table-open
 
 ```bash
-npm install mantine-react-table
+npm install mantine-react-table-open
 ```
 
 > _`@tanstack/react-table`, `@tanstack/react-virtual`, `@tanstack/match-sorter-utils`,_ are internal dependencies, so you do NOT need to install them yourself.

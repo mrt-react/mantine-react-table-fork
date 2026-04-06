@@ -37,7 +37,7 @@ export const MRT_ProgressBar = <TData extends MRT_RowData>({
         classes.collapse,
         isTopToolbar && classes['collapse-top'],
       )}
-      in={isSaving || showProgressBars}
+      expanded={isSaving || showProgressBars}
     >
       <Progress
         animated

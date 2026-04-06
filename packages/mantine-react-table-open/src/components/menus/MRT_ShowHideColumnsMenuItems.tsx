@@ -73,7 +73,7 @@ export const MRT_ShowHideColumnsMenuItems = <TData extends MRT_RowData>({
     }
   };
 
-  const menuItemRef = useRef<HTMLElement>(null);
+  const menuItemRef = useRef<HTMLElement | null>(null);
 
   const [isDragging, setIsDragging] = useState(false);
 

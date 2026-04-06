@@ -17,7 +17,7 @@ import { parseFromValuesOrFunc } from '../../utils/utils';
 import { MRT_EditCellTextInput } from '../inputs/MRT_EditCellTextInput';
 
 interface Props<TData extends MRT_RowData> extends TableTdProps {
-  parentRowRef: RefObject<HTMLTableRowElement>;
+  parentRowRef: RefObject<HTMLTableRowElement | null>;
   renderedRowIndex?: number;
   row: MRT_Row<TData>;
   rowVirtualizer?: MRT_RowVirtualizer;
@@ -122,7 +122,7 @@ export const MRT_TableDetailPanel = <TData extends MRT_RowData>({
         {rowVirtualizer ? (
           row.getIsExpanded() && DetailPanel
         ) : (
-          <Collapse in={row.getIsExpanded()}>{DetailPanel}</Collapse>
+          <Collapse expanded={row.getIsExpanded()}>{DetailPanel}</Collapse>
         )}
       </TableTd>
     </TableTr>

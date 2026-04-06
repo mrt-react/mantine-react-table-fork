@@ -149,7 +149,7 @@ export const MRT_EditCellTextInput = <TData extends MRT_RowData>({
         ref={(node) => {
           if (node) {
             editInputRefs.current[cell.id] = node;
-            if (selectProps.ref) {
+            if (selectProps.ref && typeof selectProps.ref !== 'function') {
               selectProps.ref.current = node;
             }
           }
@@ -180,7 +180,7 @@ export const MRT_EditCellTextInput = <TData extends MRT_RowData>({
         ref={(node) => {
           if (node) {
             editInputRefs.current[cell.id] = node;
-            if (selectProps.ref) {
+            if (selectProps.ref && typeof selectProps.ref !== 'function') {
               selectProps.ref.current = node;
             }
           }
@@ -207,7 +207,7 @@ export const MRT_EditCellTextInput = <TData extends MRT_RowData>({
       ref={(node) => {
         if (node) {
           editInputRefs.current[cell.id] = node;
-          if (textInputProps.ref) {
+          if (textInputProps.ref && typeof textInputProps.ref !== 'function') {
             textInputProps.ref.current = node;
           }
         }

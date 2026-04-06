@@ -64,7 +64,7 @@ const collapseRef = useRef<HTMLDivElement | null>(null);
 
   return (
     <Collapse
-      in={isCollapseOpen}
+      expanded={isCollapseOpen}
       renderRoot={({ ref, style, ...rootProps }) => (
         <div
           {...rootProps}

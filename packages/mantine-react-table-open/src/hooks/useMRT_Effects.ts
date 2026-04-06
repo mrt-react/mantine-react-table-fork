@@ -32,8 +32,8 @@ export const useMRT_Effects = <TData extends MRT_RowData>(
   const totalRowCount = rowCount ?? getPrePaginationRowModel().rows.length;
 
   const rerender = useReducer(() => ({}), {})[1];
-  const initialBodyHeight = useRef<string>();
-  const previousTop = useRef<number>();
+  const initialBodyHeight = useRef<string | undefined>(undefined);
+  const previousTop = useRef<number | undefined>(undefined);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
