@@ -1,8 +1,8 @@
-# Mantine React Table
+# Mantine React Table Open
+
+> **Unofficial fork** of [mantine-react-table](https://github.com/KevinVandy/mantine-react-table) that provides support for Mantine V8 & V9.
 
 View the [Docs Site](https://www.mantine-react-table.com/)
-
-A fork of [Material React Table](https://www.material-react-table.com)
 
 ## About
 
