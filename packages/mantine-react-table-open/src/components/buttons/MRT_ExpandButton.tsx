@@ -29,6 +29,7 @@ export const MRT_ExpandButton = <TData extends MRT_RowData>({
   table,
   ...rest
 }: Props<TData>) => {
+  'use no memo';
   const direction = useDirection();
   const {
     options: {

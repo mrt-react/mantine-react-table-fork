@@ -36,6 +36,7 @@ export const MRT_TableDetailPanel = <TData extends MRT_RowData>({
   virtualRow,
   ...rest
 }: Props<TData>) => {
+  'use no memo';
   const {
     getState,
     getVisibleLeafColumns,

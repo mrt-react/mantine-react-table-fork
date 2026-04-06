@@ -16,6 +16,7 @@ export const MRT_ToolbarDropZone = <TData extends MRT_RowData>({
   table,
   ...rest
 }: Props<TData>) => {
+  'use no memo';
   const {
     getState,
     options: { enableGrouping, localization },

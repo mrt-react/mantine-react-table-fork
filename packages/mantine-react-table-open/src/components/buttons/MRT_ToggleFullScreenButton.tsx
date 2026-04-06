@@ -26,6 +26,7 @@ export const MRT_ToggleFullScreenButton = <TData extends MRT_RowData>({
   title,
   ...rest
 }: Props<TData>) => {
+  'use no memo';
   const { isFullScreen } = getState();
   const [tooltipOpened, setTooltipOpened] = useState(false);
 

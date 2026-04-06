@@ -37,6 +37,7 @@ export const MRT_TableBody = <TData extends MRT_RowData>({
   tableProps,
   ...rest
 }: MRT_TableBodyProps<TData>) => {
+  'use no memo';
   const {
     getBottomRows,
     getIsSomeRowsPinned,

@@ -25,6 +25,7 @@ export const MRT_TableHeadCellGrabHandle = <TData extends MRT_RowData>({
   tableHeadCellRef,
   ...rest
 }: Props<TData>) => {
+  'use no memo';
   const {
     getState,
     options: { enableColumnOrdering, mantineColumnDragHandleProps },

@@ -114,6 +114,7 @@ export const useMRT_TableOptions: <TData extends MRT_RowData>(
   sortingFns,
   ...rest
 }: MRT_TableOptions<TData>) => {
+  'use no memo';
   const direction = useDirection();
 
   icons = useMemo(() => ({ ...MRT_Default_Icons, ...icons }), [icons]);

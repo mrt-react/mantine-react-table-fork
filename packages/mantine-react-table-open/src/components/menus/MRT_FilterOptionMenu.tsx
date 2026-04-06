@@ -118,6 +118,7 @@ export const MRT_FilterOptionMenu = <TData extends MRT_RowData>({
   onSelect,
   table,
 }: Props<TData>) => {
+  'use no memo';
   const {
     getState,
     options: {

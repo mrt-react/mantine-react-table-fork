@@ -29,6 +29,7 @@ export const MRT_TablePagination = <TData extends MRT_RowData>({
   table,
   ...props
 }: Props<TData>) => {
+  'use no memo';
   const {
     getPrePaginationRowModel,
     getState,

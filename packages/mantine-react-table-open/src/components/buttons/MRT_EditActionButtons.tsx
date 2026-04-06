@@ -22,6 +22,7 @@ export const MRT_EditActionButtons = <TData extends MRT_RowData>({
   variant = 'icon',
   ...rest
 }: Props<TData>) => {
+  'use no memo';
   const {
     getState,
     options: {

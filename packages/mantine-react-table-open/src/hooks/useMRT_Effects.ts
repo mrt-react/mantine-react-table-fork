@@ -11,6 +11,7 @@ import { getCanRankRows } from '../utils/row.utils';
 export const useMRT_Effects = <TData extends MRT_RowData>(
   table: MRT_TableInstance<TData>,
 ) => {
+  'use no memo';
   const {
     getIsSomeRowsPinned,
     getPrePaginationRowModel,

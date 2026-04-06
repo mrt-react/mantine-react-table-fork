@@ -26,6 +26,7 @@ export const MRT_TableFooterCell = <TData extends MRT_RowData>({
   table,
   ...rest
 }: Props<TData>) => {
+  'use no memo';
   const direction = useDirection();
   const {
     options: { enableColumnPinning, layoutMode, mantineTableFooterCellProps },

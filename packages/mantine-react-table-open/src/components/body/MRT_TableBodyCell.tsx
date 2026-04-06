@@ -55,6 +55,7 @@ export const MRT_TableBodyCell = <TData extends MRT_RowData>({
   virtualCell,
   ...rest
 }: Props<TData>) => {
+  'use no memo';
   const direction = useDirection();
 
   const {

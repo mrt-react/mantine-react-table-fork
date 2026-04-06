@@ -25,6 +25,7 @@ export const MRT_ToggleGlobalFilterButton = <TData extends MRT_RowData>({
   title,
   ...rest
 }: Props<TData>) => {
+  'use no memo';
   const { globalFilter, showGlobalFilter } = getState();
 
   const handleToggleSearch = () => {

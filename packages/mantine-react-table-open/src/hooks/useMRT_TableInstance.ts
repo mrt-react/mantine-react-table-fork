@@ -55,6 +55,7 @@ import { useMRT_Effects } from './useMRT_Effects';
 export const useMRT_TableInstance = <TData extends MRT_RowData>(
   definedTableOptions: MRT_DefinedTableOptions<TData>,
 ): MRT_TableInstance<TData> => {
+  'use no memo';
   const lastSelectedRowId = useRef<null | string>(null);
   const bottomToolbarRef = useRef<HTMLDivElement | null>(null);
   const editInputRefs = useRef<Record<string, HTMLInputElement>>({});

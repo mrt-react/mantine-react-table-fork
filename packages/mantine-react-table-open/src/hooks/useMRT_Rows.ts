@@ -10,6 +10,7 @@ import { getMRT_Rows } from '../utils/row.utils';
 export const useMRT_Rows = <TData extends MRT_RowData>(
   table: MRT_TableInstance<TData>,
 ): MRT_Row<TData>[] => {
+  'use no memo';
   const {
     getRowModel,
     getState,

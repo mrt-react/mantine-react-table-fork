@@ -45,6 +45,7 @@ export const MRT_EditCellTextInput = <TData extends MRT_RowData>({
   table,
   ...rest
 }: PropsMultiSelect<TData> | PropsSelect<TData> | PropsTextInput<TData>) => {
+  'use no memo';
   const {
     getState,
     options: {

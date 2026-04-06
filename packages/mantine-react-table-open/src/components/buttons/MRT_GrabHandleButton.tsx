@@ -30,6 +30,7 @@ export const MRT_GrabHandleButton = <TData extends MRT_RowData>({
     },
   },
 }: Props<TData>) => {
+  'use no memo';
   return (
     <Tooltip
       label={actionIconProps?.title ?? move}

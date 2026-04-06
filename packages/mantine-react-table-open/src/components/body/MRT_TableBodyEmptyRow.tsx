@@ -32,6 +32,7 @@ export const MRT_TableBodyEmptyRow = <TData extends MRT_RowData>({
   tableProps,
   ...commonRowProps
 }: Props<TData>) => {
+  'use no memo';
   const {
     getState,
     options: {

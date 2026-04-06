@@ -24,6 +24,7 @@ export const MRT_TableBodyCellValue = <TData extends MRT_RowData>({
   renderedRowIndex = 0,
   table,
 }: Props<TData>) => {
+  'use no memo';
   const {
     getState,
     options: {

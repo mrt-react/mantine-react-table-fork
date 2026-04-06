@@ -24,6 +24,7 @@ export const MRT_ToggleFiltersButton = <TData extends MRT_RowData>({
   title,
   ...rest
 }: Props<TData>) => {
+  'use no memo';
   const { showColumnFilters } = getState();
 
   return (

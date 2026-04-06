@@ -37,6 +37,7 @@ export const MRT_ToggleDensePaddingButton = <TData extends MRT_RowData>({
   title,
   ...rest
 }: Props<TData>) => {
+  'use no memo';
   const { density } = getState();
 
   return (

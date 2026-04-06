@@ -22,6 +22,7 @@ interface Props<TData extends MRT_RowData> {
 export const MRT_ShowHideColumnsMenu = <TData extends MRT_RowData>({
   table,
 }: Props<TData>) => {
+  'use no memo';
   const {
     getAllColumns,
     getAllLeafColumns,

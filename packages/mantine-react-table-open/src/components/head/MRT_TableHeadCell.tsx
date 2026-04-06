@@ -44,6 +44,7 @@ export const MRT_TableHeadCell = <TData extends MRT_RowData>({
   table,
   ...rest
 }: Props<TData>) => {
+  'use no memo';
   const direction = useDirection();
   const {
     getState,

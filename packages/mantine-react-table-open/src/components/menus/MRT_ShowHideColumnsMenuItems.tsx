@@ -43,6 +43,7 @@ export const MRT_ShowHideColumnsMenuItems = <TData extends MRT_RowData>({
   setHoveredColumn,
   table,
 }: Props<TData>) => {
+  'use no memo';
   const theme = useMantineTheme();
   const {
     getState,

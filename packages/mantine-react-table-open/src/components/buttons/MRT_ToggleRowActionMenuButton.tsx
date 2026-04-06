@@ -25,6 +25,7 @@ export const MRT_ToggleRowActionMenuButton = <TData extends MRT_RowData>({
   row,
   table,
 }: Props<TData>) => {
+  'use no memo';
   const {
     getState,
     options: {

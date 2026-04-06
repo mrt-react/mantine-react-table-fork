@@ -8,7 +8,7 @@ A fork of [Material React Table](https://www.material-react-table.com)
 
 ### _Quickly Create React Data Tables with Mantine_
 
-### __Built with [Mantine <sup>V8</sup>](https://mantine.dev/) and [TanStack Table <sup>V8</sup>](https://tanstack.com/table/v8)__
+### __Built with [Mantine <sup>V8 & V9</sup>](https://mantine.dev/) and [TanStack Table <sup>V8</sup>](https://tanstack.com/table/v8)__
 
 <img src="https://mantine-react-table.com/banner.png" alt="MRT" height="50"/>
 
@@ -79,9 +79,9 @@ _**Fully Fleshed out [Docs](https://www.mantine-react-table.com/docs/guides#guid
 
 View the full [Installation Docs](https://www.mantine-react-table.com/docs/getting-started/install)
 
-1. Ensure that you have React 18 or later installed
+1. Ensure that you have React 19 or later installed
 
-2. Install Peer Dependencies (Mantine V8 and Tabler Icons)
+2. Install Peer Dependencies (Mantine V8 or V9 and Tabler Icons)
 
 ```bash
 npm install @mantine/core @mantine/hooks @mantine/dates @emotion/react @tabler/icons-react dayjs

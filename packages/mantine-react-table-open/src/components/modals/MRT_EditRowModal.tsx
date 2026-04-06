@@ -19,6 +19,7 @@ export const MRT_EditRowModal = <TData extends MRT_RowData>({
   table,
   ...rest
 }: Props<TData>) => {
+  'use no memo';
   const {
     getState,
     options: {

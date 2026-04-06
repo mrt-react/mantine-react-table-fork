@@ -23,6 +23,7 @@ export const MRT_TableFooter = <TData extends MRT_RowData>({
   table,
   ...rest
 }: Props<TData>) => {
+  'use no memo';
   const {
     getFooterGroups,
     getState,

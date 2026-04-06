@@ -18,6 +18,7 @@ export const MRT_ShowHideColumnsButton = <TData extends MRT_RowData>({
   title,
   ...rest
 }: Props<TData>) => {
+  'use no memo';
   const {
     icons: { IconColumns },
     localization: { showHideColumns },

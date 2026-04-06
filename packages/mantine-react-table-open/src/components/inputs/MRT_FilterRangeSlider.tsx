@@ -23,6 +23,7 @@ export const MRT_FilterRangeSlider = <TData extends MRT_RowData>({
   table,
   ...rest
 }: Props<TData>) => {
+  'use no memo';
   const {
     options: { mantineFilterRangeSliderProps },
     refs: { filterInputRefs },

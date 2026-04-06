@@ -19,6 +19,7 @@ export const MRT_ColumnPinningButtons = <TData extends MRT_RowData>({
   column,
   table,
 }: Props<TData>) => {
+  'use no memo';
   const {
     options: {
       icons: { IconPinned, IconPinnedOff },

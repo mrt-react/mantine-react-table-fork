@@ -24,6 +24,7 @@ export const MRT_TopToolbar = <TData extends MRT_RowData>({
   table,
   ...rest
 }: Props<TData>) => {
+  'use no memo';
   const {
     getState,
     options: {

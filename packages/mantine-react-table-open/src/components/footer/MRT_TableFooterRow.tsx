@@ -28,6 +28,7 @@ export const MRT_TableFooterRow = <TData extends MRT_RowData>({
   table,
   ...rest
 }: Props<TData>) => {
+  'use no memo';
   const {
     options: { layoutMode, mantineTableFooterRowProps },
   } = table;
