@@ -7,12 +7,16 @@
   padding-left: var(--_column-depth);
   padding-top: rem(6px);
   padding-bottom: rem(6);
+  border-radius: 6px;
   &[data-dragging] {
     opacity: 0.5;
     outline: 1px dashed var(--mantine-color-gray-7);
   }
   &[data-order-hovered]:not(&[data-dragging]) {
     outline: 2px dashed var(--_hover-color);
+  }
+  &:hover {
+    background-color: var(--menu-item-hover, var(--mantine-color-gray-1));
   }
 }
 .menu {
