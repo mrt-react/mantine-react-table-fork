@@ -2,8 +2,8 @@ import { Box, Stack } from '@mantine/core';
 
 import {
   MantineReactTable,
-  MRT_AggregationFns,
   type MRT_ColumnDef,
+  MRT_RowAggregationFns,
 } from '../../src';
 
 import { faker } from '@faker-js/faker';
@@ -176,10 +176,12 @@ export const MultiAggregationPerColumn = () => (
           </>
         ),
         //manually set multiple aggregation functions
-        aggregationFn: (columnId, leafRows: any, childRows: any) => [
-          MRT_AggregationFns.min(columnId, leafRows, childRows),
-          MRT_AggregationFns.max(columnId, leafRows, childRows),
-        ],
+        aggregationFn: {
+          aggregate: (context: any) => [
+            MRT_RowAggregationFns.min.aggregate(context),
+            MRT_RowAggregationFns.max.aggregate(context),
+          ],
+        },
         Footer: () => (
           <Stack>
             Average Age:

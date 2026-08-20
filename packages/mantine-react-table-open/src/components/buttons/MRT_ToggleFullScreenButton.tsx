@@ -16,18 +16,17 @@ interface Props<TData extends MRT_RowData>
 
 export const MRT_ToggleFullScreenButton = <TData extends MRT_RowData>({
   table: {
-    getState,
     options: {
       icons: { IconMaximize, IconMinimize },
       localization: { toggleFullScreen },
     },
     setIsFullScreen,
+    state,
   },
   title,
   ...rest
 }: Props<TData>) => {
-  'use no memo';
-  const { isFullScreen } = getState();
+  const { isFullScreen } = state;
   const [tooltipOpened, setTooltipOpened] = useState(false);
 
   const handleToggleFullScreen = () => {

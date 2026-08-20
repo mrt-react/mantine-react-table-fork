@@ -24,7 +24,6 @@ const isTableInstanceProp = <TData extends MRT_RowData>(
 export const MantineReactTable = <TData extends MRT_RowData>(
   props: Props<TData>,
 ) => {
-  'use no memo';
   let table: MRT_TableInstance<TData>;
 
   if (isTableInstanceProp(props)) {

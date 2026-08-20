@@ -54,7 +54,7 @@ const columns: MRT_ColumnDef<(typeof data)[0]>[] = [
     Cell: ({ cell }) => cell.getValue<Date>().toLocaleDateString(), //transform data to readable format for cell render
     filterVariant: 'date',
     header: 'Birth Date',
-    sortingFn: 'datetime',
+    sortFn: 'datetime',
   },
   {
     accessorKey: 'gender',
@@ -198,7 +198,7 @@ export const FilterFnAndFilterVariants = () => (
         header: 'Birth Date',
         id: 'birthDate',
         size: 200,
-        sortingFn: 'datetime',
+        sortFn: 'datetime',
       },
       {
         accessorFn: (row) => {
@@ -211,7 +211,7 @@ export const FilterFnAndFilterVariants = () => (
         header: 'Hire Date',
         id: 'hireDate',
         size: 200,
-        sortingFn: 'datetime',
+        sortFn: 'datetime',
       },
     ]}
     data={data}
@@ -303,7 +303,7 @@ export const FilterFnAndFilterVariantsPopover = () => (
         header: 'Birth Date',
         id: 'birthDate',
         size: 200,
-        sortingFn: 'datetime',
+        sortFn: 'datetime',
       },
       {
         accessorFn: (row) => {
@@ -316,7 +316,7 @@ export const FilterFnAndFilterVariantsPopover = () => (
         header: 'Hire Date',
         id: 'hireDate',
         size: 200,
-        sortingFn: 'datetime',
+        sortFn: 'datetime',
       },
     ]}
     data={data}
@@ -823,7 +823,7 @@ export const CustomTooltipValueFn = () => {
               locale: locale,
               valueFormat: 'L',
             },
-            sortingFn: 'datetime',
+            sortFn: 'datetime',
           },
           {
             accessorFn: (row) => new Date(row.birthDate), //transform data before processing so sorting works
@@ -836,7 +836,7 @@ export const CustomTooltipValueFn = () => {
               locale: locale,
               valueFormat: 'L',
             },
-            sortingFn: 'datetime',
+            sortFn: 'datetime',
           },
         ]}
         data={data}

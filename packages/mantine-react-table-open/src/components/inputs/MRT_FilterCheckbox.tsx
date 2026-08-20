@@ -23,12 +23,11 @@ export const MRT_FilterCheckbox = <TData extends MRT_RowData>({
   table,
   ...rest
 }: Props<TData>) => {
-  'use no memo';
   const {
-    getState,
     options: { localization, mantineFilterCheckboxProps },
+    state,
   } = table;
-  const { density } = getState();
+  const { density } = state;
   const { columnDef } = column;
 
   const arg = { column, table };

@@ -23,7 +23,7 @@ export function defaultDisplayColumnProps<TData extends MRT_RowData>({
     tableOptions;
   return {
     ...defaultDisplayColumn,
-    header: header ? localization[header]! : '',
+    header: header ? localization[header] : '',
     size,
     ...displayColumnDefOptions?.[id],
     id,

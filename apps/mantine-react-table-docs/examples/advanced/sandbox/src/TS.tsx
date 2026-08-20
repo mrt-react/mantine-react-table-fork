@@ -124,7 +124,7 @@ const Example = () => {
             id: 'startDate',
             header: 'Start Date',
             filterVariant: 'date-range',
-            sortingFn: 'datetime',
+            sortFn: 'datetime',
             enableColumnFilterModes: false, //keep this as only date-range filter with between inclusive filterFn
             Cell: ({ cell }) => cell.getValue<Date>()?.toLocaleDateString(), //render Date as a string
             Header: ({ column }) => <em>{column.columnDef.header}</em>, //custom header markup
@@ -149,8 +149,8 @@ const Example = () => {
       showColumnFilters: true,
       showGlobalFilter: true,
       columnPinning: {
-        left: ['mrt-row-expand', 'mrt-row-select'],
-        right: ['mrt-row-actions'],
+        end: ['mrt-row-actions'],
+        start: ['mrt-row-expand', 'mrt-row-select'],
       },
     },
     paginationDisplayMode: 'pages',

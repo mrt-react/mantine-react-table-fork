@@ -20,13 +20,12 @@ export const MRT_TableHeadCellResizeHandle = <TData extends MRT_RowData>({
   table,
   ...rest
 }: Props<TData>) => {
-  'use no memo';
   const {
-    getState,
     options: { columnResizeDirection, columnResizeMode },
-    setColumnSizingInfo,
+    setColumnResizing,
+    state,
   } = table;
-  const { density } = getState();
+  const { density } = state;
   const { column } = header;
   const handler = header.getResizeHandler();
 
@@ -34,14 +33,14 @@ export const MRT_TableHeadCellResizeHandle = <TData extends MRT_RowData>({
     column.getIsResizing() && columnResizeMode === 'onEnd'
       ? `translateX(${
           (columnResizeDirection === 'rtl' ? -1 : 1) *
-          (getState().columnSizingInfo.deltaOffset ?? 0)
+          (state.columnResizing.deltaOffset ?? 0)
         }px)`
       : undefined;
 
   return (
     <Box
       onDoubleClick={() => {
-        setColumnSizingInfo((old) => ({
+        setColumnResizing((old) => ({
           ...old,
           isResizingColumn: false,
         }));

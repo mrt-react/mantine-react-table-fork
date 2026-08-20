@@ -2,7 +2,8 @@
   "version": "9.0.3",
   "license": "MIT",
   "name": "mantine-react-table-open",
-  "description": "A fully featured Mantine implementation of TanStack React Table V8, written from the ground up in TypeScript.",
+  "description": "A fully featured Mantine implementation of TanStack React Table V9, written from the ground up in TypeScript.",
+  "type": "module",
   "author": "Kevin Vandy",
   "keywords": [
     "react-table",
@@ -26,19 +27,12 @@
   "sideEffects": [
     "*.css"
   ],
-  "main": "dist/index.cjs",
   "module": "dist/index.esm.mjs",
   "types": "dist/index.esm.d.mts",
   "exports": {
     ".": {
-      "import": {
-        "types": "./dist/index.esm.d.mts",
-        "default": "./dist/index.esm.mjs"
-      },
-      "require": {
-        "types": "./dist/index.d.cts",
-        "default": "./dist/index.cjs"
-      }
+      "types": "./dist/index.esm.d.mts",
+      "default": "./dist/index.esm.mjs"
     },
     "./package.json": "./package.json",
     "./locales/*": "./locales/*",
@@ -52,16 +46,12 @@
   ],
   "size-limit": [
     {
-      "path": "dist/index.cjs",
-      "limit": "53 KB"
-    },
-    {
       "path": "dist/index.esm.mjs",
-      "limit": "50 KB"
+      "limit": "70 KB"
     }
   ],
   "engines": {
-    "node": ">=16"
+    "node": ">=20"
   },
   "scripts": {
     "build": "pnpm lib:build",
@@ -133,9 +123,10 @@
     "vite": "^5.4.8"
   },
   "dependencies": {
-    "@tanstack/match-sorter-utils": "8.19.4",
-    "@tanstack/react-table": "8.20.5",
-    "@tanstack/react-virtual": "3.11.2"
+    "@tanstack/match-sorter-utils": "^9.1.2",
+    "@tanstack/react-store": "^0.11.1",
+    "@tanstack/react-table": "^9.1.2",
+    "@tanstack/react-virtual": "^3.14.9"
   },
   "peerDependencies": {
     "@mantine/core": "^9.0.0",

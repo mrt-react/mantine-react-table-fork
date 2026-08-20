@@ -24,17 +24,16 @@ export const MRT_TableBodyCellValue = <TData extends MRT_RowData>({
   renderedRowIndex = 0,
   table,
 }: Props<TData>) => {
-  'use no memo';
   const {
-    getState,
     options: {
       enableFilterMatchHighlighting,
       mantineHighlightProps = { size: 'sm' },
     },
+    state,
   } = table;
   const { column, row } = cell;
   const { columnDef } = column;
-  const { globalFilter, globalFilterFn } = getState();
+  const { globalFilter, globalFilterFn } = state;
   const filterValue = column.getFilterValue();
 
   const highlightProps = parseFromValuesOrFunc(mantineHighlightProps, {

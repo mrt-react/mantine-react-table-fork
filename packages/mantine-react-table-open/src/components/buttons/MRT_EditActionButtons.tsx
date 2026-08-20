@@ -22,9 +22,7 @@ export const MRT_EditActionButtons = <TData extends MRT_RowData>({
   variant = 'icon',
   ...rest
 }: Props<TData>) => {
-  'use no memo';
   const {
-    getState,
     options: {
       icons: { IconCircleX, IconDeviceFloppy },
       localization,
@@ -36,8 +34,9 @@ export const MRT_EditActionButtons = <TData extends MRT_RowData>({
     refs: { editInputRefs },
     setCreatingRow,
     setEditingRow,
+    state,
   } = table;
-  const { creatingRow, editingRow, isSaving } = getState();
+  const { creatingRow, editingRow, isSaving } = state;
 
   const isCreating = creatingRow?.id === row.id;
   const isEditing = editingRow?.id === row.id;
@@ -60,7 +59,7 @@ export const MRT_EditActionButtons = <TData extends MRT_RowData>({
       ?.forEach((input) => {
         if (
           input.value !== undefined &&
-          Object.hasOwn(row?._valuesCache as object, input.name)
+          Object.hasOwn(row?._valuesCache, input.name)
         ) {
           // @ts-ignore
           row._valuesCache[input.name] = input.value;

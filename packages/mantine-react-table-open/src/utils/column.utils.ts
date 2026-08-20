@@ -1,5 +1,3 @@
-import { type Row } from '@tanstack/react-table';
-
 import {
   type MRT_Column,
   type MRT_ColumnDef,
@@ -40,10 +38,9 @@ export const prepareColumns = <TData extends MRT_RowData>({
   tableOptions: MRT_DefinedTableOptions<TData>;
 }): MRT_DefinedColumnDef<TData>[] => {
   const {
-    aggregationFns = {},
     defaultDisplayColumn,
     filterFns = {},
-    sortingFns = {},
+    sortFns = {},
     state: { columnFilterFns = {} } = {},
   } = tableOptions;
   return columnDefs.map((columnDef) => {
@@ -59,19 +56,6 @@ export const prepareColumns = <TData extends MRT_RowData>({
         tableOptions,
       });
     } else if (columnDef.columnDefType === 'data') {
-      //assign aggregationFns if multiple aggregationFns are provided
-      if (Array.isArray(columnDef.aggregationFn)) {
-        const aggFns = columnDef.aggregationFn as string[];
-        columnDef.aggregationFn = (
-          columnId: string,
-          leafRows: Row<TData>[],
-          childRows: Row<TData>[],
-        ) =>
-          aggFns.map((fn) =>
-            aggregationFns[fn]?.(columnId, leafRows, childRows),
-          );
-      }
-
       //assign filterFns
       if (Object.keys(filterFns).includes(columnFilterFns[columnDef.id])) {
         columnDef.filterFn =
@@ -80,10 +64,9 @@ export const prepareColumns = <TData extends MRT_RowData>({
           columnFilterFns[columnDef.id];
       }
 
-      //assign sortingFns
-      if (Object.keys(sortingFns).includes(columnDef.sortingFn as string)) {
-        // @ts-ignore
-        columnDef.sortingFn = sortingFns[columnDef.sortingFn];
+      //assign sortFns
+      if (Object.keys(sortFns).includes(columnDef.sortFn as string)) {
+        columnDef.sortFn = sortFns[columnDef.sortFn as string];
       }
     } else if (columnDef.columnDefType === 'display') {
       columnDef = {

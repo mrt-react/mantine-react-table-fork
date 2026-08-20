@@ -1,4 +1,4 @@
-import { MantineReactTable, MRT_TableOptions } from '../../src';
+import { MantineReactTable } from '../../src';
 
 import { type Meta } from '@storybook/react';
 
@@ -138,7 +138,7 @@ export const PinnedColumnsWithStickyFooter = () => {
       enableColumnPinning
       enableStickyFooter
       enableStickyHeader
-      initialState={{ columnPinning: { left: ['no', 'name', 'firstName'] } }}
+      initialState={{ columnPinning: { end: [], start: ['no', 'name', 'firstName'] } }}
       mantineTableBodyCellProps={{
         align: 'center',
         style: { borderLeft: '1px solid black' },

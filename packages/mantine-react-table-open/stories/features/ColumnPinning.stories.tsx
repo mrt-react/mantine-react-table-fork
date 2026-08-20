@@ -54,7 +54,7 @@ export const ColumnPinningInitial = () => (
     columns={columns}
     data={data}
     enableColumnPinning
-    initialState={{ columnPinning: { left: ['email'], right: ['state'] } }}
+    initialState={{ columnPinning: { end: ['state'], start: ['email'] } }}
   />
 );
 
@@ -63,7 +63,7 @@ export const ColumnPinningDisabledPerColumn = () => (
     columns={[
       {
         accessorKey: 'firstName',
-        enableColumnPinning: false,
+        enablePinning: false,
         header: 'First Name',
       },
       {

@@ -93,7 +93,7 @@ const data: Person[] = [...Array(100)].map(() => ({
   lastName: faker.person.lastName(),
   phoneNumber: faker.phone.number(),
   state: faker.location.state(),
-  visitedStates: faker.helpers.multiple(faker.location.state),
+  visitedStates: faker.helpers.multiple(() => faker.location.state()),
 }));
 
 export const EditingEnabledEditModeModalDefault = () => {

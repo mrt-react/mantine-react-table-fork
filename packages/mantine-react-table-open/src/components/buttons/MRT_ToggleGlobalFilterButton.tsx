@@ -14,19 +14,18 @@ interface Props<TData extends MRT_RowData>
 
 export const MRT_ToggleGlobalFilterButton = <TData extends MRT_RowData>({
   table: {
-    getState,
     options: {
       icons: { IconSearch, IconSearchOff },
       localization: { showHideSearch },
     },
     refs: { searchInputRef },
     setShowGlobalFilter,
+    state,
   },
   title,
   ...rest
 }: Props<TData>) => {
-  'use no memo';
-  const { globalFilter, showGlobalFilter } = getState();
+  const { globalFilter, showGlobalFilter } = state;
 
   const handleToggleSearch = () => {
     setShowGlobalFilter(!showGlobalFilter);

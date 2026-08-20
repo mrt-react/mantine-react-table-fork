@@ -29,11 +29,9 @@ export const MRT_TableHead = <TData extends MRT_RowData>({
   table,
   ...rest
 }: Props<TData>) => {
-  'use no memo';
   const {
     getHeaderGroups,
     getSelectedRowModel,
-    getState,
     options: {
       enableStickyHeader,
       layoutMode,
@@ -41,8 +39,9 @@ export const MRT_TableHead = <TData extends MRT_RowData>({
       positionToolbarAlertBanner,
     },
     refs: { tableHeadRef },
+    state,
   } = table;
-  const { isFullScreen, showAlertBanner } = getState();
+  const { isFullScreen, showAlertBanner } = state;
 
   const tableHeadProps = {
     ...parseFromValuesOrFunc(mantineTableHeadProps, {

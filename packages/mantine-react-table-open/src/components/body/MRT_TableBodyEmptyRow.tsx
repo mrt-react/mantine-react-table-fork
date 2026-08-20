@@ -4,7 +4,7 @@ import classes from './MRT_TableBody.module.css';
 
 import { useMemo } from 'react';
 
-import { createRow } from '@tanstack/react-table';
+import { constructRow as createRow } from '@tanstack/react-table';
 
 import {
   type TableProps,
@@ -32,9 +32,7 @@ export const MRT_TableBodyEmptyRow = <TData extends MRT_RowData>({
   tableProps,
   ...commonRowProps
 }: Props<TData>) => {
-  'use no memo';
   const {
-    getState,
     options: {
       layoutMode,
       localization,
@@ -42,8 +40,9 @@ export const MRT_TableBodyEmptyRow = <TData extends MRT_RowData>({
       renderEmptyRowsFallback,
     },
     refs: { tablePaperRef },
+    state,
   } = table;
-  const { columnFilters, globalFilter } = getState();
+  const { columnFilters, globalFilter } = state;
 
   const emptyRow = useMemo(
     () =>

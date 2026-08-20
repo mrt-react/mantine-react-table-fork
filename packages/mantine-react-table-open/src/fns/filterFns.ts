@@ -3,7 +3,7 @@ import {
   rankings,
   rankItem,
 } from '@tanstack/match-sorter-utils';
-import { filterFns, type Row } from '@tanstack/react-table';
+import { filterFns, type Row, type StockFeatures } from '@tanstack/react-table';
 
 import {
   type MRT_FilterOption,
@@ -77,7 +77,7 @@ const isNullishFilterValue = (value: unknown) =>
   value === undefined || value === null || value === '';
 
 const fuzzy = <TData extends MRT_RowData>(
-  row: Row<TData>,
+  row: Row<StockFeatures, TData>,
   columnId: string,
   filterValue: number | string,
   addMeta: (item: RankingInfo) => void,
@@ -92,7 +92,7 @@ const fuzzy = <TData extends MRT_RowData>(
 fuzzy.autoRemove = (val: any) => !val;
 
 const contains = <TData extends MRT_RowData>(
-  row: Row<TData>,
+  row: Row<StockFeatures, TData>,
   id: string,
   filterValue: number | string,
 ) =>
@@ -103,7 +103,7 @@ const contains = <TData extends MRT_RowData>(
 contains.autoRemove = (val: any) => !val;
 
 const startsWith = <TData extends MRT_RowData>(
-  row: Row<TData>,
+  row: Row<StockFeatures, TData>,
   id: string,
   filterValue: number | string,
 ) =>
@@ -114,7 +114,7 @@ const startsWith = <TData extends MRT_RowData>(
 startsWith.autoRemove = (val: any) => !val;
 
 const endsWith = <TData extends MRT_RowData>(
-  row: Row<TData>,
+  row: Row<StockFeatures, TData>,
   id: string,
   filterValue: number | string,
 ) =>
@@ -125,7 +125,7 @@ const endsWith = <TData extends MRT_RowData>(
 endsWith.autoRemove = (val: any) => !val;
 
 const equals = <TData extends MRT_RowData>(
-  row: Row<TData>,
+  row: Row<StockFeatures, TData>,
   id: string,
   filterValue: number | string,
 ) => compareValues(row.getValue(id), filterValue) === 0;
@@ -133,15 +133,16 @@ const equals = <TData extends MRT_RowData>(
 equals.autoRemove = (val: any) => !val;
 
 const notEquals = <TData extends MRT_RowData>(
-  row: Row<TData>,
+  row: Row<StockFeatures, TData>,
   id: string,
   filterValue: number | string,
-) => normalizeStringValue(row.getValue(id)) !== normalizeStringValue(filterValue);
+) =>
+  normalizeStringValue(row.getValue(id)) !== normalizeStringValue(filterValue);
 
 notEquals.autoRemove = (val: any) => !val;
 
 const greaterThan = <TData extends MRT_RowData>(
-  row: Row<TData>,
+  row: Row<StockFeatures, TData>,
   id: string,
   filterValue: number | string,
 ) => compareValues(row.getValue(id), filterValue) > 0;
@@ -149,7 +150,7 @@ const greaterThan = <TData extends MRT_RowData>(
 greaterThan.autoRemove = (val: any) => !val;
 
 const greaterThanOrEqualTo = <TData extends MRT_RowData>(
-  row: Row<TData>,
+  row: Row<StockFeatures, TData>,
   id: string,
   filterValue: number | string,
 ) => compareValues(row.getValue(id), filterValue) >= 0;
@@ -157,7 +158,7 @@ const greaterThanOrEqualTo = <TData extends MRT_RowData>(
 greaterThanOrEqualTo.autoRemove = (val: any) => !val;
 
 const lessThan = <TData extends MRT_RowData>(
-  row: Row<TData>,
+  row: Row<StockFeatures, TData>,
   id: string,
   filterValue: number | string,
 ) => compareValues(row.getValue(id), filterValue) < 0;
@@ -165,7 +166,7 @@ const lessThan = <TData extends MRT_RowData>(
 lessThan.autoRemove = (val: any) => !val;
 
 const lessThanOrEqualTo = <TData extends MRT_RowData>(
-  row: Row<TData>,
+  row: Row<StockFeatures, TData>,
   id: string,
   filterValue: number | string,
 ) => compareValues(row.getValue(id), filterValue) <= 0;
@@ -173,7 +174,7 @@ const lessThanOrEqualTo = <TData extends MRT_RowData>(
 lessThanOrEqualTo.autoRemove = (val: any) => !val;
 
 const between = <TData extends MRT_RowData>(
-  row: Row<TData>,
+  row: Row<StockFeatures, TData>,
   id: string,
   filterValues: [number | string, number | string],
 ) => {
@@ -197,7 +198,7 @@ const between = <TData extends MRT_RowData>(
 between.autoRemove = (val: any) => !val;
 
 const betweenInclusive = <TData extends MRT_RowData>(
-  row: Row<TData>,
+  row: Row<StockFeatures, TData>,
   id: string,
   filterValues: [number | string, number | string],
 ) => {
@@ -207,17 +208,11 @@ const betweenInclusive = <TData extends MRT_RowData>(
     return true;
   }
 
-  if (
-    !isNullishFilterValue(min) &&
-    compareValues(row.getValue(id), min) < 0
-  ) {
+  if (!isNullishFilterValue(min) && compareValues(row.getValue(id), min) < 0) {
     return false;
   }
 
-  if (
-    !isNullishFilterValue(max) &&
-    compareValues(row.getValue(id), max) > 0
-  ) {
+  if (!isNullishFilterValue(max) && compareValues(row.getValue(id), max) > 0) {
     return false;
   }
 
@@ -227,7 +222,7 @@ const betweenInclusive = <TData extends MRT_RowData>(
 betweenInclusive.autoRemove = (val: any) => !val;
 
 const empty = <TData extends MRT_RowData>(
-  row: Row<TData>,
+  row: Row<StockFeatures, TData>,
   id: string,
   _filterValue: number | string,
 ) => !row.getValue<number | string>(id)?.toString().trim();
@@ -235,7 +230,7 @@ const empty = <TData extends MRT_RowData>(
 empty.autoRemove = (val: any) => !val;
 
 const notEmpty = <TData extends MRT_RowData>(
-  row: Row<TData>,
+  row: Row<StockFeatures, TData>,
   id: string,
   _filterValue: number | string,
 ) => !!row.getValue<number | string>(id)?.toString().trim();

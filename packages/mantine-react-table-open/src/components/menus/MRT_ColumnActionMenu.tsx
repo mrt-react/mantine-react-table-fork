@@ -19,9 +19,7 @@ export const MRT_ColumnActionMenu = <TData extends MRT_RowData>({
   table,
   ...rest
 }: Props<TData>) => {
-  'use no memo';
   const {
-    getState,
     options: {
       columnFilterDisplayMode,
       enableColumnFilters,
@@ -51,13 +49,14 @@ export const MRT_ColumnActionMenu = <TData extends MRT_RowData>({
     },
     refs: { filterInputRefs },
     setColumnOrder,
-    setColumnSizingInfo,
+    setColumnResizing,
     setShowColumnFilters,
+    state,
     toggleAllColumnsVisible,
   } = table;
   const { column } = header;
   const { columnDef } = column;
-  const { columnSizing, columnVisibility } = getState();
+  const { columnSizing, columnVisibility } = state;
 
   const arg = { column, table };
   const actionIconProps = {
@@ -78,7 +77,7 @@ export const MRT_ColumnActionMenu = <TData extends MRT_RowData>({
   };
 
   const handleResetColumnSize = () => {
-    setColumnSizingInfo((old) => ({ ...old, isResizingColumn: false }));
+    setColumnResizing((old) => ({ ...old, isResizingColumn: false }));
     column.resetSize();
   };
 
@@ -86,7 +85,7 @@ export const MRT_ColumnActionMenu = <TData extends MRT_RowData>({
     column.toggleVisibility(false);
   };
 
-  const handlePinColumn = (pinDirection: 'left' | 'right' | false) => {
+  const handlePinColumn = (pinDirection: 'end' | 'start' | false) => {
     column.pin(pinDirection);
   };
 
@@ -185,16 +184,16 @@ export const MRT_ColumnActionMenu = <TData extends MRT_RowData>({
       {enableColumnPinning && column.getCanPin() && (
         <>
           <Menu.Item
-            disabled={column.getIsPinned() === 'left' || !column.getCanPin()}
+            disabled={column.getIsPinned() === 'start' || !column.getCanPin()}
             leftSection={<IconPinned className={classes.left} />}
-            onClick={() => handlePinColumn('left')}
+            onClick={() => handlePinColumn('start')}
           >
             {localization.pinToLeft}
           </Menu.Item>
           <Menu.Item
-            disabled={column.getIsPinned() === 'right' || !column.getCanPin()}
+            disabled={column.getIsPinned() === 'end' || !column.getCanPin()}
             leftSection={<IconPinned className={classes.right} />}
-            onClick={() => handlePinColumn('right')}
+            onClick={() => handlePinColumn('end')}
           >
             {localization.pinToRight}
           </Menu.Item>

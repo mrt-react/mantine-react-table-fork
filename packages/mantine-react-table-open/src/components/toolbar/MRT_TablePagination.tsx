@@ -29,10 +29,8 @@ export const MRT_TablePagination = <TData extends MRT_RowData>({
   table,
   ...props
 }: Props<TData>) => {
-  'use no memo';
   const {
-    getPrePaginationRowModel,
-    getState,
+    getPrePaginatedRowModel,
     options: {
       enableToolbarInternalActions,
       icons: {
@@ -48,11 +46,12 @@ export const MRT_TablePagination = <TData extends MRT_RowData>({
     },
     setPageIndex,
     setPageSize,
+    state,
   } = table;
   const {
     pagination: { pageIndex = 0, pageSize = 10 },
     showGlobalFilter,
-  } = getState();
+  } = state;
 
   const paginationProps = {
     ...parseFromValuesOrFunc(mantinePaginationProps, {
@@ -61,7 +60,7 @@ export const MRT_TablePagination = <TData extends MRT_RowData>({
     ...props,
   };
 
-  const totalRowCount = rowCount ?? getPrePaginationRowModel().rows.length;
+  const totalRowCount = rowCount ?? getPrePaginatedRowModel().rows.length;
   const numberOfPages = Math.ceil(totalRowCount / pageSize);
   const showFirstLastPageButtons = numberOfPages > 2;
   const firstRowIndex = pageIndex * pageSize;

@@ -22,7 +22,6 @@ export const MRT_FilterRangeFields = <TData extends MRT_RowData>({
   table,
   ...rest
 }: Props<TData>) => {
-  'use no memo';
   return (
     <Box
       {...rest}

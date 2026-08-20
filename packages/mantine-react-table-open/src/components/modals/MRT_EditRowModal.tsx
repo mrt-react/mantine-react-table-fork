@@ -19,9 +19,7 @@ export const MRT_EditRowModal = <TData extends MRT_RowData>({
   table,
   ...rest
 }: Props<TData>) => {
-  'use no memo';
   const {
-    getState,
     options: {
       mantineCreateRowModalProps,
       mantineEditRowModalProps,
@@ -32,8 +30,9 @@ export const MRT_EditRowModal = <TData extends MRT_RowData>({
     },
     setCreatingRow,
     setEditingRow,
+    state,
   } = table;
-  const { creatingRow, editingRow } = getState();
+  const { creatingRow, editingRow } = state;
   const row = (creatingRow ?? editingRow) as MRT_Row<TData>;
 
   const arg = { row, table };
@@ -58,7 +57,7 @@ export const MRT_EditRowModal = <TData extends MRT_RowData>({
       onEditingRowCancel?.({ row, table });
       setEditingRow(null);
     }
-    row._valuesCache = {} as any; //reset values cache
+    row._valuesCache = {} as any; // reset values cache
     modalProps.onClose?.();
   };
 

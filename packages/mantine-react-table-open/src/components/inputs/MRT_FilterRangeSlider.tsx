@@ -23,7 +23,6 @@ export const MRT_FilterRangeSlider = <TData extends MRT_RowData>({
   table,
   ...rest
 }: Props<TData>) => {
-  'use no memo';
   const {
     options: { mantineFilterRangeSliderProps },
     refs: { filterInputRefs },
@@ -76,7 +75,7 @@ export const MRT_FilterRangeSlider = <TData extends MRT_RowData>({
       max={max}
       min={min}
       onChange={(values) => {
-        setFilterValues(values as [number, number]);
+        setFilterValues(values);
       }}
       onChangeEnd={(values) => {
         if (Array.isArray(values)) {
@@ -84,7 +83,7 @@ export const MRT_FilterRangeSlider = <TData extends MRT_RowData>({
             //if the user has selected the entire range, remove the filter
             column.setFilterValue(undefined);
           } else {
-            column.setFilterValue(values as [number, number]);
+            column.setFilterValue(values);
           }
         }
       }}

@@ -16,7 +16,7 @@ interface Props<TData extends MRT_RowData, TValue = MRT_CellValue>
   extends ActionIconProps {
   column: MRT_Column<TData, TValue>;
   table: MRT_TableInstance<TData>;
-  tableHeadCellRef: RefObject<HTMLTableCellElement | null>;
+  tableHeadCellRef: RefObject<HTMLTableCellElement>;
 }
 
 export const MRT_TableHeadCellGrabHandle = <TData extends MRT_RowData>({
@@ -25,16 +25,15 @@ export const MRT_TableHeadCellGrabHandle = <TData extends MRT_RowData>({
   tableHeadCellRef,
   ...rest
 }: Props<TData>) => {
-  'use no memo';
   const {
-    getState,
     options: { enableColumnOrdering, mantineColumnDragHandleProps },
     setColumnOrder,
     setDraggingColumn,
     setHoveredColumn,
+    state,
   } = table;
   const { columnDef } = column;
-  const { columnOrder, draggingColumn, hoveredColumn } = getState();
+  const { columnOrder, draggingColumn, hoveredColumn } = state;
 
   const arg = { column, table };
   const actionIconProps = {
@@ -46,11 +45,7 @@ export const MRT_TableHeadCellGrabHandle = <TData extends MRT_RowData>({
   const handleDragStart = (event: DragEvent<HTMLButtonElement>) => {
     actionIconProps?.onDragStart?.(event);
     setDraggingColumn(column);
-    event.dataTransfer.setDragImage(
-      tableHeadCellRef.current as HTMLElement,
-      0,
-      0,
-    );
+    event.dataTransfer.setDragImage(tableHeadCellRef.current, 0, 0);
   };
 
   const handleDragEnd = (event: DragEvent<HTMLButtonElement>) => {
