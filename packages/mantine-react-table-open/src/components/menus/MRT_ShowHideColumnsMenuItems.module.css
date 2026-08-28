@@ -16,7 +16,7 @@
     outline: 2px dashed var(--_hover-color);
   }
   &:hover {
-    background-color: var(--menu-item-hover, var(--mantine-color-gray-1));
+    background-color: var(--menu-item-hover, var(--mantine-color-default-hover));
   }
 }
 .menu {
