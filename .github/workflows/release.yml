@@ -1,9 +1,16 @@
 name: Publish Package
 
+# Two release lines, one workflow:
+#   main -> 9.x (TanStack Table v8) published as `latest`
+#   v10  -> 10.x (TanStack Table v9) published as `next`
+# The "Resolve release line" guards make a mis-merge (or the routine
+# main -> v10 sync) publish nothing instead of publishing the wrong line.
+
 on:
   push:
     branches:
       - main
+      - v10
 
 jobs:
   publish:
@@ -30,39 +37,67 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Resolve release line
+        id: line
+        shell: bash
+        run: |
+          MAJOR=$(node -p "require('./packages/mantine-react-table-open/package.json').version.split('.')[0]")
+          SKIP=false
+          TAG=latest
+          if [ "${GITHUB_REF_NAME}" = "v10" ]; then
+            TAG=next
+            if [ "$MAJOR" != "10" ]; then
+              SKIP=true
+              echo "v10 branch carries major ${MAJOR} (expected 10) - skipping publish"
+            fi
+          else
+            if [ "$MAJOR" -ge 10 ]; then
+              SKIP=true
+              echo "main branch carries major ${MAJOR} (expected < 10) - skipping publish"
+            fi
+          fi
+          echo "skip=${SKIP}" >> "$GITHUB_OUTPUT"
+          echo "tag=${TAG}" >> "$GITHUB_OUTPUT"
+
       - name: Ensure release changeset
+        if: steps.line.outputs.skip != 'true'
         shell: bash
         run: |
           RELEASE_FILES=$(find .changeset -maxdepth 1 -type f -name '*.md' ! -name 'README.md')
           if [ -z "$RELEASE_FILES" ]; then
-            printf '%s\n' '---' '"mantine-react-table-open": patch' '---' '' 'Automated release triggered by push to main.' > \
+            printf '%s\n' '---' '"mantine-react-table-open": patch' '---' '' "Automated release triggered by push to ${GITHUB_REF_NAME}." > \
               ".changeset/auto-release-${GITHUB_RUN_ID}.md"
           fi
 
       - name: Version packages
+        if: steps.line.outputs.skip != 'true'
         run: pnpm changeset version
 
       - name: Update lockfile
+        if: steps.line.outputs.skip != 'true'
         run: pnpm install --frozen-lockfile
 
       - name: Build package
+        if: steps.line.outputs.skip != 'true'
         run: pnpm --filter mantine-react-table-open run build
 
       - name: Commit release
+        if: steps.line.outputs.skip != 'true'
         run: |
           RELEASE_VERSION=$(node -p "require('./packages/mantine-react-table-open/package.json').version")
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add packages/mantine-react-table-open/package.json packages/mantine-react-table-open/CHANGELOG.md pnpm-lock.yaml
+          git add packages/mantine-react-table-open/package.json packages/mantine-react-table-open/CHANGELOG.md pnpm-lock.yaml .changeset
           git commit -m "chore(release): publish v${RELEASE_VERSION}" || echo "No changes to commit"
 
       - name: Publish to npm
+        if: steps.line.outputs.skip != 'true'
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: pnpm changeset publish
+        run: pnpm changeset publish --tag ${{ steps.line.outputs.tag }}
 
       - name: Push changes and tags
+        if: steps.line.outputs.skip != 'true'
         run: |
           git push origin HEAD
           git push origin --follow-tags
-
