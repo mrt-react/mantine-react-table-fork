@@ -7,6 +7,7 @@ import {
   type MRT_FilterOption,
   type MRT_RowData,
 } from '../types';
+import { coerceAggregationFn, getColumnSortFn } from './compat.utils';
 
 export const getColumnId = <TData extends MRT_RowData>(
   columnDef: MRT_ColumnDef<TData>,
@@ -38,6 +39,7 @@ export const prepareColumns = <TData extends MRT_RowData>({
   tableOptions: MRT_DefinedTableOptions<TData>;
 }): MRT_DefinedColumnDef<TData>[] => {
   const {
+    aggregationFns = {},
     defaultDisplayColumn,
     filterFns = {},
     sortFns = {},
@@ -64,9 +66,20 @@ export const prepareColumns = <TData extends MRT_RowData>({
           columnFilterFns[columnDef.id];
       }
 
-      //assign sortFns
+      //assign sortFns (accepting the v8 `sortingFn` spelling)
+      if (columnDef.sortFn === undefined) {
+        columnDef.sortFn = getColumnSortFn(columnDef);
+      }
       if (Object.keys(sortFns).includes(columnDef.sortFn as string)) {
         columnDef.sortFn = sortFns[columnDef.sortFn as string];
+      }
+
+      //coerce v8-style aggregation fns (bare functions, positional arrays)
+      if (columnDef.aggregationFn !== undefined) {
+        columnDef.aggregationFn = coerceAggregationFn(
+          columnDef.aggregationFn,
+          aggregationFns,
+        ) as typeof columnDef.aggregationFn;
       }
     } else if (columnDef.columnDefType === 'display') {
       columnDef = {

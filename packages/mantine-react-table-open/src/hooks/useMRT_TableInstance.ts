@@ -29,6 +29,13 @@ import {
   prepareColumns,
 } from '../utils/column.utils';
 import {
+  applyColumnPinCompat,
+  applyLegacyInstanceAliases,
+  coerceColumnPinning,
+  coerceRowPinning,
+  coerceRowSelection,
+} from '../utils/compat.utils';
+import {
   getDefaultColumnOrderIds,
   showRowActionsColumn,
   showRowDragColumn,
@@ -81,6 +88,16 @@ export const useMRT_TableInstance = <TData extends MRT_RowData>(
         },
       } as MRT_StatefulTableOptions<TData>);
     initState.globalFilterFn = definedTableOptions.globalFilterFn ?? 'fuzzy';
+    //v8 compat: accept legacy key/shape spellings in initial state
+    if (initState.columnPinning) {
+      initState.columnPinning = coerceColumnPinning(initState.columnPinning);
+    }
+    if (initState.rowPinning) {
+      initState.rowPinning = coerceRowPinning(initState.rowPinning);
+    }
+    if ((initState as any).columnSizingInfo && !initState.columnResizing) {
+      initState.columnResizing = (initState as any).columnSizingInfo;
+    }
     return initState;
   }, []);
 
@@ -199,6 +216,27 @@ export const useMRT_TableInstance = <TData extends MRT_RowData>(
     showToolbarDropZone,
     ...definedTableOptions.state,
   };
+
+  //v8 compat: coerce legacy key/shape spellings in controlled state
+  {
+    const optionState = definedTableOptions.state as Record<string, any>;
+    if (optionState.columnPinning) {
+      optionState.columnPinning = coerceColumnPinning(
+        optionState.columnPinning,
+      );
+    }
+    if (optionState.rowPinning) {
+      optionState.rowPinning = coerceRowPinning(optionState.rowPinning);
+    }
+    if (optionState.rowSelection) {
+      optionState.rowSelection = coerceRowSelection(optionState.rowSelection);
+    }
+    //columnResizing is always pre-filled from the atom, so a consumer
+    //controlling state via the legacy columnSizingInfo key must win over it
+    if (optionState.columnSizingInfo) {
+      optionState.columnResizing = optionState.columnSizingInfo;
+    }
+  }
 
   //The table options now include all state needed to help determine column visibility and order logic
   const statefulTableOptions =
@@ -327,7 +365,7 @@ export const useMRT_TableInstance = <TData extends MRT_RowData>(
     (state) => state,
   ) as unknown as MRT_TableInstance<TData>;
 
-  table.state = {
+  const mergedState: MRT_TableState<TData> = {
     ...table.state,
     columnFilterFns,
     creatingRow,
@@ -345,10 +383,10 @@ export const useMRT_TableInstance = <TData extends MRT_RowData>(
     showGlobalFilter,
     showToolbarDropZone,
   };
+  //deprecated v8 mirror of the renamed columnResizing state key
+  (mergedState as any).columnSizingInfo = mergedState.columnResizing;
 
-  table.getState = () => table.state;
-
-  table.refs = {
+  const refs = {
     bottomToolbarRef,
     editInputRefs,
     filterInputRefs,
@@ -362,7 +400,7 @@ export const useMRT_TableInstance = <TData extends MRT_RowData>(
     topToolbarRef,
   };
 
-  table.setCreatingRow = (row: MRT_Updater<MRT_Row<TData> | null | true>) => {
+  const setCreatingRow = (row: MRT_Updater<MRT_Row<TData> | null | true>) => {
     let _row = row;
     if (row === true) {
       _row = createRow(table);
@@ -373,36 +411,64 @@ export const useMRT_TableInstance = <TData extends MRT_RowData>(
       creatingRowAtom.set(_row as MRT_Row<TData> | null);
     }
   };
-  table.setColumnFilterFns = (statefulTableOptions.onColumnFilterFnsChange ??
-    columnFilterFnsAtom.set) as any;
-  table.setDensity = (statefulTableOptions.onDensityChange ??
-    densityAtom.set) as any;
-  table.setDraggingColumn = (statefulTableOptions.onDraggingColumnChange ??
-    draggingColumnAtom.set) as any;
-  table.setDraggingRow = (statefulTableOptions.onDraggingRowChange ??
-    draggingRowAtom.set) as any;
-  table.setEditingCell = (statefulTableOptions.onEditingCellChange ??
-    editingCellAtom.set) as any;
-  table.setEditingRow = (statefulTableOptions.onEditingRowChange ??
-    editingRowAtom.set) as any;
-  table.setGlobalFilterFn = (statefulTableOptions.onGlobalFilterFnChange ??
-    globalFilterFnAtom.set) as any;
-  table.setHoveredColumn = (statefulTableOptions.onHoveredColumnChange ??
-    hoveredColumnAtom.set) as any;
-  table.setHoveredRow = (statefulTableOptions.onHoveredRowChange ??
-    hoveredRowAtom.set) as any;
-  table.setIsFullScreen = (statefulTableOptions.onIsFullScreenChange ??
-    isFullScreenAtom.set) as any;
-  table.setShowAlertBanner = (statefulTableOptions.onShowAlertBannerChange ??
-    showAlertBannerAtom.set) as any;
-  table.setShowColumnFilters =
-    (statefulTableOptions.onShowColumnFiltersChange ??
-      showColumnFiltersAtom.set) as any;
-  table.setShowGlobalFilter = (statefulTableOptions.onShowGlobalFilterChange ??
-    showGlobalFilterAtom.set) as any;
-  table.setShowToolbarDropZone =
-    (statefulTableOptions.onShowToolbarDropZoneChange ??
-      showToolbarDropZoneAtom.set) as any;
+
+  //v9's useTable returns a shallow copy of the core table, but
+  //header.getContext()/cell.getContext() hand out the core instance via
+  //backrefs (header.column.table / cell.table). Apply the MRT extensions to
+  //BOTH objects so headless consumers using the documented
+  //flexRender(def, header.getContext()) pattern get a fully-featured table.
+  const coreTable = (table.getAllFlatColumns?.()[0] as any)?.table as
+    | MRT_TableInstance<TData>
+    | undefined;
+  const tableInstances =
+    coreTable && coreTable !== (table as unknown)
+      ? [table, coreTable]
+      : [table];
+
+  for (const instance of tableInstances) {
+    instance.state = mergedState;
+    instance.getState = () => mergedState;
+    instance.refs = refs;
+    instance.setCreatingRow = setCreatingRow;
+    instance.setColumnFilterFns =
+      (statefulTableOptions.onColumnFilterFnsChange ??
+        columnFilterFnsAtom.set) as any;
+    instance.setDensity = (statefulTableOptions.onDensityChange ??
+      densityAtom.set) as any;
+    instance.setDraggingColumn = (statefulTableOptions.onDraggingColumnChange ??
+      draggingColumnAtom.set) as any;
+    instance.setDraggingRow = (statefulTableOptions.onDraggingRowChange ??
+      draggingRowAtom.set) as any;
+    instance.setEditingCell = (statefulTableOptions.onEditingCellChange ??
+      editingCellAtom.set) as any;
+    instance.setEditingRow = (statefulTableOptions.onEditingRowChange ??
+      editingRowAtom.set) as any;
+    instance.setGlobalFilterFn = (statefulTableOptions.onGlobalFilterFnChange ??
+      globalFilterFnAtom.set) as any;
+    instance.setHoveredColumn = (statefulTableOptions.onHoveredColumnChange ??
+      hoveredColumnAtom.set) as any;
+    instance.setHoveredRow = (statefulTableOptions.onHoveredRowChange ??
+      hoveredRowAtom.set) as any;
+    instance.setIsFullScreen = (statefulTableOptions.onIsFullScreenChange ??
+      isFullScreenAtom.set) as any;
+    instance.setShowAlertBanner =
+      (statefulTableOptions.onShowAlertBannerChange ??
+        showAlertBannerAtom.set) as any;
+    instance.setShowColumnFilters =
+      (statefulTableOptions.onShowColumnFiltersChange ??
+        showColumnFiltersAtom.set) as any;
+    instance.setShowGlobalFilter =
+      (statefulTableOptions.onShowGlobalFilterChange ??
+        showGlobalFilterAtom.set) as any;
+    instance.setShowToolbarDropZone =
+      (statefulTableOptions.onShowToolbarDropZoneChange ??
+        showToolbarDropZoneAtom.set) as any;
+    //deprecated v8-named instance methods forwarding to their v9 renames
+    applyLegacyInstanceAliases(instance);
+  }
+
+  //accept v8-style column.pin('left'/'right') calls
+  applyColumnPinCompat(table);
 
   useMRT_Effects(table);
 

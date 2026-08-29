@@ -24,6 +24,7 @@ import {
   type MRT_RowData,
   type MRT_TableOptions,
 } from '../types';
+import { stripLegacyRowModelOptions } from '../utils/compat.utils';
 
 export const MRT_DefaultColumn = {
   filterVariant: 'text',
@@ -116,6 +117,20 @@ export const useMRT_TableOptions: <TData extends MRT_RowData>(
 }: MRT_TableOptions<TData>) => {
   const direction = useDirection();
 
+  //v8 compat: accept legacy option spellings
+  const {
+    onColumnSizingInfoChange,
+    sortingFns,
+    ...restOptions
+  } = rest as {
+    onColumnSizingInfoChange?: unknown;
+    sortingFns?: typeof sortFns;
+  } & typeof rest;
+  stripLegacyRowModelOptions(restOptions as Record<string, unknown>);
+  if (onColumnSizingInfoChange && !(restOptions as any).onColumnResizingChange) {
+    (restOptions as any).onColumnResizingChange = onColumnSizingInfoChange;
+  }
+
   icons = useMemo(() => ({ ...MRT_Default_Icons, ...icons }), [icons]);
   localization = useMemo(
     () => ({
@@ -132,7 +147,10 @@ export const useMRT_TableOptions: <TData extends MRT_RowData>(
     () => ({ ...MRT_FilterFns, ...filterFns }) as typeof filterFns,
     [],
   );
-  sortFns = useMemo(() => ({ ...MRT_SortFns, ...sortFns }), []);
+  sortFns = useMemo(
+    () => ({ ...MRT_SortFns, ...sortingFns, ...sortFns }),
+    [],
+  );
   defaultColumn = useMemo(
     () => ({ ...MRT_DefaultColumn, ...defaultColumn }),
     [defaultColumn],
@@ -171,7 +189,7 @@ export const useMRT_TableOptions: <TData extends MRT_RowData>(
     manualPagination = true;
   }
 
-  if (!rest.data?.length) {
+  if (!restOptions.data?.length) {
     manualFiltering = true;
     manualGrouping = true;
     manualPagination = true;
@@ -271,6 +289,6 @@ export const useMRT_TableOptions: <TData extends MRT_RowData>(
     rowPinningDisplayMode,
     selectAllMode,
     sortFns,
-    ...rest,
+    ...restOptions,
   } as MRT_DefinedTableOptions<TData>;
 };

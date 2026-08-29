@@ -261,8 +261,19 @@ export const MRT_TableBodyCell = <TData extends MRT_RowData>({
         (isColumnPinned === 'end' && column.getIsFirstColumn(isColumnPinned)) ||
         undefined
       }
+      // deprecated v8 name, kept for consumer CSS compat
+      data-first-right-pinned={
+        (isColumnPinned === 'end' && column.getIsFirstColumn(isColumnPinned)) ||
+        undefined
+      }
       data-hovered-column-target={isHoveredColumn || undefined}
       data-index={renderedColumnIndex}
+      // deprecated v8 name, kept for consumer CSS compat
+      data-last-left-pinned={
+        (isColumnPinned === 'start' &&
+          column.getIsLastColumn(isColumnPinned)) ||
+        undefined
+      }
       data-last-row={renderedRowIndex === numRows - 1 || undefined}
       data-last-start-pinned={
         (isColumnPinned === 'start' &&
@@ -280,6 +291,16 @@ export const MRT_TableBodyCell = <TData extends MRT_RowData>({
         '--mrt-cell-align':
           tableCellProps.align ?? (direction.dir === 'rtl' ? 'right' : 'left'),
         '--mrt-table-cell-end':
+          isColumnPinned === 'end'
+            ? `${column.getAfter(isColumnPinned)}`
+            : undefined,
+        // deprecated v8 name, kept for consumer CSS compat
+        '--mrt-table-cell-left':
+          isColumnPinned === 'start'
+            ? `${column.getStart(isColumnPinned)}`
+            : undefined,
+        // deprecated v8 name, kept for consumer CSS compat
+        '--mrt-table-cell-right':
           isColumnPinned === 'end'
             ? `${column.getAfter(isColumnPinned)}`
             : undefined,

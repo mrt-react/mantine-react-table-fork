@@ -126,6 +126,11 @@ export type MRT_PaginationState = PaginationState;
 export type MRT_RowSelectionState = RowSelectionState;
 export type MRT_SortingState = SortingState;
 export type MRT_Updater<T> = Updater<T>;
+
+/** @deprecated use `MRT_ColumnResizingState` (renamed in TanStack Table v9) */
+export type MRT_ColumnSizingInfoState = ColumnResizingState;
+/** @deprecated use `MRT_ColumnVisibilityState` (renamed in TanStack Table v9) */
+export type MRT_VisibilityState = ColumnVisibilityState;
 export type MRT_VirtualItem = VirtualItem;
 
 export type MRT_VirtualizerOptions<
@@ -289,9 +294,17 @@ export type MRT_TableInstance<TData extends MRT_RowData> = {
   getFilteredSelectedRowModel: () => MRT_RowModel<TData>;
   getFlatHeaders: () => MRT_Header<TData>[];
   getHeaderGroups: () => MRT_HeaderGroup<TData>[];
+  /** @deprecated use `getStartLeafColumns` (renamed in TanStack Table v9) */
+  getLeftLeafColumns: () => MRT_Column<TData>[];
+  getPaginatedRowModel: () => MRT_RowModel<TData>;
+  /** @deprecated use `getPaginatedRowModel` (renamed in TanStack Table v9) */
   getPaginationRowModel: () => MRT_RowModel<TData>;
   getPreFilteredRowModel: () => MRT_RowModel<TData>;
   getPrePaginatedRowModel: () => MRT_RowModel<TData>;
+  /** @deprecated use `getPrePaginatedRowModel` (renamed in TanStack Table v9) */
+  getPrePaginationRowModel: () => MRT_RowModel<TData>;
+  /** @deprecated use `getEndLeafColumns` (renamed in TanStack Table v9) */
+  getRightLeafColumns: () => MRT_Column<TData>[];
   getRowModel: () => MRT_RowModel<TData>;
   getSelectedRowModel: () => MRT_RowModel<TData>;
   getStartLeafColumns: () => MRT_Column<TData>[];
@@ -340,6 +353,7 @@ export type MRT_TableInstance<TData extends MRT_RowData> = {
   | 'getExpandedRowModel'
   | 'getFlatHeaders'
   | 'getHeaderGroups'
+  | 'getPaginatedRowModel'
   | 'getPaginationRowModel'
   | 'getPreFilteredRowModel'
   | 'getPrePaginatedRowModel'
@@ -384,6 +398,8 @@ export type MRT_StatefulTableOptions<TData extends MRT_RowData> = {
 export type MRT_TableState<TData extends MRT_RowData> = Prettify<
   {
     columnFilterFns: MRT_ColumnFilterFnsState;
+    /** @deprecated use `columnResizing` (renamed in TanStack Table v9); kept as a read mirror */
+    columnSizingInfo?: ColumnResizingState;
     creatingRow: MRT_Row<TData> | null;
     density: MRT_DensityState;
     draggingColumn: MRT_Column<TData> | null;
@@ -432,8 +448,10 @@ export type MRT_ColumnDef<TData extends MRT_RowData, TValue = unknown> = {
   aggregationFn?:
     | Array<
         | { aggregationFn: MRT_RowAggregationFn<TData>; id: string }
+        | MRT_LegacyAggregationFn<TData>
         | MRT_RowAggregationOption
       >
+    | MRT_LegacyAggregationFn<TData>
     | MRT_RowAggregationFn<TData>;
   Cell?: (props: {
     cell: MRT_Cell<TData, TValue>;
@@ -656,6 +674,8 @@ export type MRT_ColumnDef<TData extends MRT_RowData, TValue = unknown> = {
     table: MRT_TableInstance<TData>;
   }) => ReactNode;
   sortFn?: MRT_SortFn<TData>;
+  /** @deprecated use `sortFn` (renamed in TanStack Table v9) */
+  sortingFn?: MRT_SortFn<TData>;
   visibleInShowHideMenu?: boolean;
 } & Omit<
   ColumnDef<StockFeatures, TData, TValue>,
@@ -756,11 +776,30 @@ export type MRT_RowAggregationFn<TData extends MRT_RowData> =
   | AggregationFnDef<StockFeatures, TData, any, any>
   | MRT_RowAggregationOption;
 
+/**
+ * @deprecated v8-style aggregation function signature; automatically adapted
+ * to a v9 AggregationFnDef by MRT
+ */
+export type MRT_LegacyAggregationFn<TData extends MRT_RowData> = (
+  columnId: string,
+  leafRows: MRT_Row<TData>[],
+  childRows: MRT_Row<TData>[],
+) => unknown;
+
+/** @deprecated use `MRT_RowAggregationOption` (renamed in TanStack Table v9) */
+export type MRT_AggregationOption = MRT_RowAggregationOption;
+/** @deprecated use `MRT_RowAggregationFn` (renamed in TanStack Table v9) */
+export type MRT_AggregationFn<TData extends MRT_RowData> =
+  MRT_RowAggregationFn<TData>;
+
 export type MRT_SortingOption = LiteralUnion<keyof typeof MRT_SortFns & string>;
 
 export type MRT_SortFn<TData extends MRT_RowData> =
   | MRT_SortingOption
   | SortFn<StockFeatures, TData>;
+
+/** @deprecated use `MRT_SortFn` (renamed in TanStack Table v9) */
+export type MRT_SortingFn<TData extends MRT_RowData> = MRT_SortFn<TData>;
 
 export type MRT_FilterOption = LiteralUnion<
   keyof typeof MRT_FilterFns & string
@@ -1177,6 +1216,8 @@ export type MRT_TableOptions<TData extends MRT_RowData> = {
    */
   memoMode?: 'cells' | 'rows' | 'table-body';
   onColumnFilterFnsChange?: OnChangeFn<{ [key: string]: MRT_FilterOption }>;
+  /** @deprecated use `onColumnResizingChange` (renamed in TanStack Table v9) */
+  onColumnSizingInfoChange?: OnChangeFn<ColumnResizingState>;
   onCreatingRowCancel?: (props: {
     row: MRT_Row<TData>;
     table: MRT_TableInstance<TData>;
@@ -1306,6 +1347,8 @@ export type MRT_TableOptions<TData extends MRT_RowData> = {
   selectAllMode?: 'all' | 'page';
   selectDisplayMode?: 'checkbox' | 'radio' | 'switch';
   sortFns?: Record<string, SortFn<StockFeatures, TData>>;
+  /** @deprecated use `sortFns` (renamed in TanStack Table v9) */
+  sortingFns?: Record<string, SortFn<StockFeatures, TData>>;
   /**
    * Manage state externally any way you want, then pass it back into MRT.
    */

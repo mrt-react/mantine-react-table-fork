@@ -26,6 +26,9 @@ export const MRT_SortFns = {
   fuzzy,
 };
 
+/** @deprecated use `MRT_SortFns` (renamed in TanStack Table v9) */
+export const MRT_SortingFns = MRT_SortFns;
+
 export const rankGlobalFuzzy = <TData extends MRT_RowData>(
   rowA: MRT_Row<TData>,
   rowB: MRT_Row<TData>,

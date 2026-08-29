@@ -1,5 +1,5 @@
 {
-  "version": "9.0.4",
+  "version": "10.0.0",
   "license": "MIT",
   "name": "mantine-react-table-open",
   "description": "A fully featured Mantine implementation of TanStack React Table V9, written from the ground up in TypeScript.",
@@ -125,7 +125,7 @@
   "dependencies": {
     "@tanstack/match-sorter-utils": "^9.1.2",
     "@tanstack/react-store": "^0.11.1",
-    "@tanstack/react-table": "^9.1.2",
+    "@tanstack/react-table": "^9.2.4",
     "@tanstack/react-virtual": "^3.14.9"
   },
   "peerDependencies": {

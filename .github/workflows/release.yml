@@ -53,7 +53,7 @@ jobs:
           RELEASE_VERSION=$(node -p "require('./packages/mantine-react-table-open/package.json').version")
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add packages/mantine-react-table-open/package.json packages/mantine-react-table-open/CHANGELOG.md pnpm-lock.yaml
+          git add packages/mantine-react-table-open/package.json packages/mantine-react-table-open/CHANGELOG.md pnpm-lock.yaml .changeset
           git commit -m "chore(release): publish v${RELEASE_VERSION}" || echo "No changes to commit"
 
       - name: Publish to npm
