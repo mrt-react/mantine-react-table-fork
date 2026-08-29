@@ -89,10 +89,10 @@ const Example = () => {
             Export All Data
           </Button>
           <Button
-            disabled={table.getPrePaginationRowModel().rows.length === 0}
+            disabled={table.getPrePaginatedRowModel().rows.length === 0}
             //export all rows, including from the next page, (still respects filtering and sorting)
             onClick={() =>
-              handleExportRows(table.getPrePaginationRowModel().rows)
+              handleExportRows(table.getPrePaginatedRowModel().rows)
             }
             leftSection={<IconDownload />}
             variant="filled"

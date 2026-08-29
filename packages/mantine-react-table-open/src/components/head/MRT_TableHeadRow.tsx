@@ -28,12 +28,11 @@ export const MRT_TableHeadRow = <TData extends MRT_RowData>({
   table,
   ...rest
 }: Props<TData>) => {
-  'use no memo';
   const {
-    getState,
     options: { enableStickyHeader, layoutMode, mantineTableHeadRowProps },
+    state,
   } = table;
-  const { isFullScreen } = getState();
+  const { isFullScreen } = state;
 
   const { virtualColumns, virtualPaddingLeft, virtualPaddingRight } =
     columnVirtualizer ?? {};

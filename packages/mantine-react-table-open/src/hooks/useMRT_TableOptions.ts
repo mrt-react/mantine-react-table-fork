@@ -1,22 +1,22 @@
 import { useMemo } from 'react';
 
 import {
-  getCoreRowModel,
-  getExpandedRowModel,
-  getFacetedMinMaxValues,
-  getFacetedRowModel,
-  getFacetedUniqueValues,
-  getFilteredRowModel,
-  getGroupedRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
+  createExpandedRowModel,
+  createFacetedMinMaxValues,
+  createFacetedRowModel,
+  createFacetedUniqueValues,
+  createFilteredRowModel,
+  createGroupedRowModel,
+  createPaginatedRowModel,
+  createSortedRowModel,
+  stockFeatures,
 } from '@tanstack/react-table';
 
 import { useDirection } from '@mantine/core';
 
-import { MRT_AggregationFns } from '../fns/aggregationFns';
+import { MRT_RowAggregationFns } from '../fns/aggregationFns';
 import { MRT_FilterFns } from '../fns/filterFns';
-import { MRT_SortingFns } from '../fns/sortingFns';
+import { MRT_SortFns } from '../fns/sortingFns';
 import { MRT_Default_Icons } from '../icons';
 import { MRT_Localization_EN } from '../locales/en';
 import {
@@ -24,6 +24,10 @@ import {
   type MRT_RowData,
   type MRT_TableOptions,
 } from '../types';
+import {
+  coerceAggregationRegistry,
+  stripLegacyRowModelOptions,
+} from '../utils/compat.utils';
 
 export const MRT_DefaultColumn = {
   filterVariant: 'text',
@@ -111,11 +115,24 @@ export const useMRT_TableOptions: <TData extends MRT_RowData>(
   rowNumberDisplayMode = 'static',
   rowPinningDisplayMode = 'sticky',
   selectAllMode = 'page',
-  sortingFns,
+  sortFns,
   ...rest
 }: MRT_TableOptions<TData>) => {
-  'use no memo';
   const direction = useDirection();
+
+  //v8 compat: accept legacy option spellings
+  const {
+    onColumnSizingInfoChange,
+    sortingFns,
+    ...restOptions
+  } = rest as {
+    onColumnSizingInfoChange?: unknown;
+    sortingFns?: typeof sortFns;
+  } & typeof rest;
+  stripLegacyRowModelOptions(restOptions as Record<string, unknown>);
+  if (onColumnSizingInfoChange && !(restOptions as any).onColumnResizingChange) {
+    (restOptions as any).onColumnResizingChange = onColumnSizingInfoChange;
+  }
 
   icons = useMemo(() => ({ ...MRT_Default_Icons, ...icons }), [icons]);
   localization = useMemo(
@@ -126,11 +143,18 @@ export const useMRT_TableOptions: <TData extends MRT_RowData>(
     [localization],
   );
   aggregationFns = useMemo(
-    () => ({ ...MRT_AggregationFns, ...aggregationFns }),
+    //coerce v8-style bare-function registry entries into v9 AggregationFnDefs
+    () => coerceAggregationRegistry({ ...MRT_RowAggregationFns, ...aggregationFns }),
     [],
   );
-  filterFns = useMemo(() => ({ ...MRT_FilterFns, ...filterFns }), []);
-  sortingFns = useMemo(() => ({ ...MRT_SortingFns, ...sortingFns }), []);
+  filterFns = useMemo(
+    () => ({ ...MRT_FilterFns, ...filterFns }) as typeof filterFns,
+    [],
+  );
+  sortFns = useMemo(
+    () => ({ ...MRT_SortFns, ...sortingFns, ...sortFns }),
+    [],
+  );
   defaultColumn = useMemo(
     () => ({ ...MRT_DefaultColumn, ...defaultColumn }),
     [defaultColumn],
@@ -169,7 +193,7 @@ export const useMRT_TableOptions: <TData extends MRT_RowData>(
     manualPagination = true;
   }
 
-  if (!rest.data?.length) {
+  if (!restOptions.data?.length) {
     manualFiltering = true;
     manualGrouping = true;
     manualPagination = true;
@@ -219,27 +243,29 @@ export const useMRT_TableOptions: <TData extends MRT_RowData>(
     enableTableHead,
     enableToolbarInternalActions,
     enableTopToolbar,
+    //v9 freezes `features` (and the fn registries) at table construction -
+    //table_mergeOptions pins them to the construction-time object forever.
+    //Register everything unconditionally: the enable*/manual* options are
+    //checked by v9 at call time, and gating here would permanently disable
+    //row models for any table whose FIRST render had them off (e.g. the
+    //standard async pattern of mounting with data: [] forces manual* on,
+    //which would otherwise freeze the table with no client-side row models)
+    features: {
+      ...stockFeatures,
+      aggregationFns,
+      expandedRowModel: createExpandedRowModel(),
+      facetedMinMaxValues: createFacetedMinMaxValues(),
+      facetedRowModel: createFacetedRowModel(),
+      facetedUniqueValues: createFacetedUniqueValues(),
+      filteredRowModel: createFilteredRowModel(),
+      filterFns,
+      groupedRowModel: createGroupedRowModel(),
+      paginatedRowModel: createPaginatedRowModel(),
+      sortedRowModel: createSortedRowModel(),
+      sortFns,
+    },
     filterFns,
-    getCoreRowModel: getCoreRowModel(),
-    getExpandedRowModel:
-      enableExpanding || enableGrouping ? getExpandedRowModel() : undefined,
-    getFacetedMinMaxValues: enableFacetedValues
-      ? getFacetedMinMaxValues()
-      : undefined,
-    getFacetedRowModel: enableFacetedValues ? getFacetedRowModel() : undefined,
-    getFacetedUniqueValues: enableFacetedValues
-      ? getFacetedUniqueValues()
-      : undefined,
-    getFilteredRowModel:
-      enableColumnFilters || enableGlobalFilter || enableFilters
-        ? getFilteredRowModel()
-        : undefined,
-    getGroupedRowModel: enableGrouping ? getGroupedRowModel() : undefined,
-    getPaginationRowModel: enablePagination
-      ? getPaginationRowModel()
-      : undefined,
-    getSortedRowModel: enableSorting ? getSortedRowModel() : undefined,
-    getSubRows: (row) => row?.subRows,
+    getSubRows: (row: TData) => (row as any)?.subRows,
     icons,
     layoutMode,
     localization,
@@ -258,7 +284,7 @@ export const useMRT_TableOptions: <TData extends MRT_RowData>(
     rowNumberDisplayMode,
     rowPinningDisplayMode,
     selectAllMode,
-    sortingFns,
-    ...rest,
+    sortFns,
+    ...restOptions,
   } as MRT_DefinedTableOptions<TData>;
 };

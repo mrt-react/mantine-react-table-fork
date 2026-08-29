@@ -34,9 +34,7 @@ export const MRT_TableHeadCellFilterContainer = <TData extends MRT_RowData>({
   table,
   ...rest
 }: Props<TData>) => {
-  'use no memo';
   const {
-    getState,
     options: {
       columnFilterDisplayMode,
       columnFilterModeOptions,
@@ -45,8 +43,9 @@ export const MRT_TableHeadCellFilterContainer = <TData extends MRT_RowData>({
       localization,
     },
     refs: { filterInputRefs },
+    state,
   } = table;
-  const { showColumnFilters } = getState();
+  const { showColumnFilters } = state;
   const { column } = header;
   const { columnDef } = column;
 
@@ -55,7 +54,7 @@ export const MRT_TableHeadCellFilterContainer = <TData extends MRT_RowData>({
     columnDef?.columnFilterModeOptions ?? columnFilterModeOptions;
   const isCollapseOpen =
     showColumnFilters || columnFilterDisplayMode === 'popover';
-const collapseRef = useRef<HTMLDivElement | null>(null);
+  const collapseRef = useRef<HTMLDivElement | null>(null);
 
   const showChangeModeButton =
     enableColumnFilterModes &&

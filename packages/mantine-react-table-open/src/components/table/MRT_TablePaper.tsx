@@ -19,9 +19,7 @@ export const MRT_TablePaper = <TData extends MRT_RowData>({
   table,
   ...rest
 }: Props<TData>) => {
-  'use no memo';
   const {
-    getState,
     options: {
       enableBottomToolbar,
       enableTopToolbar,
@@ -30,8 +28,9 @@ export const MRT_TablePaper = <TData extends MRT_RowData>({
       renderTopToolbar,
     },
     refs: { tablePaperRef },
+    state,
   } = table;
-  const { isFullScreen } = getState();
+  const { isFullScreen } = state;
 
   const tablePaperProps = {
     ...parseFromValuesOrFunc(mantinePaperProps, { table }),

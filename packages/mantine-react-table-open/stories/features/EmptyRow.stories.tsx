@@ -1,11 +1,8 @@
-import { useState } from 'react';
-
-import { Center, Flex, Group, Stack, Switch, Text } from '@mantine/core';
+import { Center, Text } from '@mantine/core';
 
 import {
   MantineReactTable,
   type MRT_ColumnDef,
-  MRT_EditActionButtons,
   useMantineReactTable,
 } from '../../src';
 

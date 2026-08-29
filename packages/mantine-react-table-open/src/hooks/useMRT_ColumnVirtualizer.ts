@@ -17,11 +17,9 @@ export const useMRT_ColumnVirtualizer = <
 >(
   table: MRT_TableInstance<TData>,
 ): MRT_ColumnVirtualizer | undefined => {
-  'use no memo';
   const {
-    getLeftLeafColumns,
-    getRightLeafColumns,
-    getState,
+    getEndLeafColumns,
+    getStartLeafColumns,
     getVisibleLeafColumns,
     options: {
       columnVirtualizerInstanceRef,
@@ -30,8 +28,9 @@ export const useMRT_ColumnVirtualizer = <
       enableColumnVirtualization,
     },
     refs: { tableContainerRef },
+    state,
   } = table;
-  const { columnPinning, draggingColumn } = getState();
+  const { columnPinning, draggingColumn } = state;
 
   if (!enableColumnVirtualization) return undefined;
 
@@ -48,8 +47,8 @@ export const useMRT_ColumnVirtualizer = <
     () =>
       enableColumnPinning
         ? [
-            getLeftLeafColumns().map((c) => c.getPinnedIndex()),
-            getRightLeafColumns()
+            getStartLeafColumns().map((c) => c.getPinnedIndex()),
+            getEndLeafColumns()
               .map(
                 (column) => visibleColumns.length - column.getPinnedIndex() - 1,
               )
@@ -96,7 +95,7 @@ export const useMRT_ColumnVirtualizer = <
   }) as unknown as MRT_ColumnVirtualizer<TScrollElement, TItemElement>;
 
   const virtualColumns = columnVirtualizer.getVirtualItems();
-  columnVirtualizer.virtualColumns = virtualColumns as any;
+  columnVirtualizer.virtualColumns = virtualColumns;
   const numColumns = virtualColumns.length;
 
   if (numColumns) {

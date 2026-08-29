@@ -3,6 +3,7 @@ import Link from 'next/link';
 import {
   MantineReactTable,
   type MRT_ColumnDef,
+  type MRT_ColumnPinningState,
   type MRT_Row,
 } from 'mantine-react-table-open';
 import { Anchor, Text } from '@mantine/core';
@@ -65,17 +66,17 @@ const RowInstanceAPIsTable = ({ onlyOptions }: Props) => {
     [],
   );
 
-  const [columnPinning, setColumnPinning] = useState({});
+  const [columnPinning, setColumnPinning] = useState<MRT_ColumnPinningState>({ end: [], start: [] });
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
       if (isDesktop) {
         setColumnPinning({
-          left: ['mrt-row-expand', 'mrt-row-numbers', 'rowInstanceAPI'],
-          right: ['link'],
+          start: ['mrt-row-expand', 'mrt-row-numbers', 'rowInstanceAPI'],
+          end: ['link'],
         });
       } else {
-        setColumnPinning({});
+        setColumnPinning({ end: [], start: [] });
       }
     }
   }, [isDesktop]);

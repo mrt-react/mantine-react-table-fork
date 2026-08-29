@@ -43,14 +43,14 @@ const HomePage = () => {
           </Anchor>
         </Link>{' '}
         and&nbsp;
-        <Link href="https://tanstack.com/table/v8" passHref legacyBehavior>
+        <Link href="https://tanstack.com/table/v9" passHref legacyBehavior>
           <Anchor
             c="blue.8"
             className={classes.builtWithTanStack}
             target="_blank"
             rel="noopener"
           >
-            TanStack&nbsp;Table<sup>V8</sup>
+            TanStack&nbsp;Table<sup>V9</sup>
           </Anchor>
         </Link>
       </Title>

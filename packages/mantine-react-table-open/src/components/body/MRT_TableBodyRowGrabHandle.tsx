@@ -12,7 +12,7 @@ import { MRT_GrabHandleButton } from '../buttons/MRT_GrabHandleButton';
 
 interface Props<TData extends MRT_RowData> extends ActionIconProps {
   row: MRT_Row<TData>;
-  rowRef: RefObject<HTMLTableRowElement | null>;
+  rowRef: RefObject<HTMLTableRowElement>;
   table: MRT_TableInstance<TData>;
 }
 
@@ -22,7 +22,6 @@ export const MRT_TableBodyRowGrabHandle = <TData extends MRT_RowData>({
   table,
   ...rest
 }: Props<TData>) => {
-  'use no memo';
   const {
     options: { mantineRowDragHandleProps },
   } = table;
@@ -37,8 +36,8 @@ export const MRT_TableBodyRowGrabHandle = <TData extends MRT_RowData>({
 
   const handleDragStart = (event: DragEvent<HTMLButtonElement>) => {
     actionIconProps?.onDragStart?.(event);
-    event.dataTransfer.setDragImage(rowRef.current as HTMLElement, 0, 0);
-    table.setDraggingRow(row as any);
+    event.dataTransfer.setDragImage(rowRef.current, 0, 0);
+    table.setDraggingRow(row);
   };
 
   const handleDragEnd = (event: DragEvent<HTMLButtonElement>) => {

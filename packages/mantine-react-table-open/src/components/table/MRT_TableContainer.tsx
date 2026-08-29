@@ -23,9 +23,7 @@ export const MRT_TableContainer = <TData extends MRT_RowData>({
   table,
   ...rest
 }: Props<TData>) => {
-  'use no memo';
   const {
-    getState,
     options: {
       createDisplayMode,
       editDisplayMode,
@@ -34,6 +32,7 @@ export const MRT_TableContainer = <TData extends MRT_RowData>({
       mantineTableContainerProps,
     },
     refs: { bottomToolbarRef, tableContainerRef, topToolbarRef },
+    state,
   } = table;
   const {
     creatingRow,
@@ -41,7 +40,7 @@ export const MRT_TableContainer = <TData extends MRT_RowData>({
     isFullScreen,
     isLoading,
     showLoadingOverlay,
-  } = getState();
+  } = state;
 
   const [totalToolbarHeight, setTotalToolbarHeight] = useState(0);
 

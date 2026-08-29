@@ -20,7 +20,6 @@ export const MRT_RowActionMenu = <TData extends MRT_RowData>({
   table,
   ...rest
 }: Props<TData>) => {
-  'use no memo';
   const {
     options: {
       editDisplayMode,

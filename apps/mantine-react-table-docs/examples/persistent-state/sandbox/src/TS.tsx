@@ -10,7 +10,7 @@ import {
   type MRT_ColumnFiltersState,
   type MRT_DensityState,
   type MRT_SortingState,
-  type MRT_VisibilityState,
+  type MRT_ColumnVisibilityState,
 } from 'mantine-react-table-open';
 import { data, type Person } from './makeData';
 
@@ -43,7 +43,7 @@ const Example = () => {
   const [columnFilters, setColumnFilters] = useState<MRT_ColumnFiltersState>(
     [],
   );
-  const [columnVisibility, setColumnVisibility] = useState<MRT_VisibilityState>(
+  const [columnVisibility, setColumnVisibility] = useState<MRT_ColumnVisibilityState>(
     {},
   );
   const [density, setDensity] = useState<MRT_DensityState>('md');

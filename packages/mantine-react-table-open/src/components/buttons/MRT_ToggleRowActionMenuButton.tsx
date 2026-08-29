@@ -25,9 +25,7 @@ export const MRT_ToggleRowActionMenuButton = <TData extends MRT_RowData>({
   row,
   table,
 }: Props<TData>) => {
-  'use no memo';
   const {
-    getState,
     options: {
       createDisplayMode,
       editDisplayMode,
@@ -38,16 +36,17 @@ export const MRT_ToggleRowActionMenuButton = <TData extends MRT_RowData>({
       renderRowActions,
     },
     setEditingRow,
+    state,
   } = table;
 
-  const { creatingRow, editingRow } = getState();
+  const { creatingRow, editingRow } = state;
 
   const isCreating = creatingRow?.id === row.id;
   const isEditing = editingRow?.id === row.id;
 
   const handleStartEditMode = (event: MouseEvent) => {
     event.stopPropagation();
-    setEditingRow({ ...row });
+    setEditingRow(row);
   };
 
   const showEditActionButtons =

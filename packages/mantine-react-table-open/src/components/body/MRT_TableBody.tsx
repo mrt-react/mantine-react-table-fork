@@ -37,12 +37,10 @@ export const MRT_TableBody = <TData extends MRT_RowData>({
   tableProps,
   ...rest
 }: MRT_TableBodyProps<TData>) => {
-  'use no memo';
   const {
     getBottomRows,
     getIsSomeRowsPinned,
     getRowModel,
-    getState,
     getTopRows,
     options: {
       enableStickyFooter,
@@ -54,8 +52,9 @@ export const MRT_TableBody = <TData extends MRT_RowData>({
       rowPinningDisplayMode,
     },
     refs: { tableFooterRef, tableHeadRef },
+    state,
   } = table;
-  const { isFullScreen, rowPinning } = getState();
+  const { isFullScreen, rowPinning } = state;
 
   const tableBodyProps = {
     ...parseFromValuesOrFunc(mantineTableBodyProps, { table }),

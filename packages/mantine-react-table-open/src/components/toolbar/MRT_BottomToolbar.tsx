@@ -22,9 +22,7 @@ export const MRT_BottomToolbar = <TData extends MRT_RowData>({
   table,
   ...rest
 }: Props<TData>) => {
-  'use no memo';
   const {
-    getState,
     options: {
       enablePagination,
       mantineBottomToolbarProps,
@@ -34,8 +32,9 @@ export const MRT_BottomToolbar = <TData extends MRT_RowData>({
       renderBottomToolbarCustomActions,
     },
     refs: { bottomToolbarRef },
+    state,
   } = table;
-  const { isFullScreen } = getState();
+  const { isFullScreen } = state;
 
   const isMobile = useMediaQuery('(max-width: 720px)');
 

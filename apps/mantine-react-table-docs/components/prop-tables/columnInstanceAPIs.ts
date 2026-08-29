@@ -45,7 +45,7 @@ export const columnInstanceAPIs: ColumnInstanceAPI[] = [
     linkText: '',
   },
   {
-    columnInstanceAPI: 'getAggregationFn',
+    columnInstanceAPI: 'getAggregationFns',
     type: '',
     description: '',
     link: '',
@@ -73,7 +73,7 @@ export const columnInstanceAPIs: ColumnInstanceAPI[] = [
     linkText: '',
   },
   {
-    columnInstanceAPI: 'getAutoSortingFn',
+    columnInstanceAPI: 'getAutoSortFn',
     type: '',
     description: '',
     link: '',
@@ -276,7 +276,7 @@ export const columnInstanceAPIs: ColumnInstanceAPI[] = [
     linkText: '',
   },
   {
-    columnInstanceAPI: 'getSortingFn',
+    columnInstanceAPI: 'getSortFn',
     type: '',
     description: '',
     link: '',

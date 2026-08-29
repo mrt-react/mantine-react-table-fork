@@ -22,7 +22,6 @@ export const MRT_RowPinButton = <TData extends MRT_RowData>({
   table,
   ...rest
 }: Props<TData>) => {
-  'use no memo';
   const {
     options: {
       icons: { IconPinned, IconX },

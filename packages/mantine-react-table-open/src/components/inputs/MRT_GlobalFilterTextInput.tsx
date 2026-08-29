@@ -26,9 +26,7 @@ export const MRT_GlobalFilterTextInput = <TData extends MRT_RowData>({
   table,
   ...rest
 }: Props<TData>) => {
-  'use no memo';
   const {
-    getState,
     options: {
       enableGlobalFilterModes,
       icons: { IconSearch, IconX },
@@ -39,8 +37,9 @@ export const MRT_GlobalFilterTextInput = <TData extends MRT_RowData>({
     },
     refs: { searchInputRef },
     setGlobalFilter,
+    state,
   } = table;
-  const { globalFilter, showGlobalFilter } = getState();
+  const { globalFilter, showGlobalFilter } = state;
 
   const textFieldProps = {
     ...parseFromValuesOrFunc(mantineSearchTextInputProps, {

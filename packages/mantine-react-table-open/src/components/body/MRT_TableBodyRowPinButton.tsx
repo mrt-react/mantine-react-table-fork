@@ -18,12 +18,11 @@ export const MRT_TableBodyRowPinButton = <TData extends MRT_RowData>({
   table,
   ...rest
 }: Props<TData>) => {
-  'use no memo';
   const {
-    getState,
     options: { enableRowPinning, rowPinningDisplayMode },
+    state,
   } = table;
-  const { density } = getState();
+  const { density } = state;
 
   const canPin = parseFromValuesOrFunc(enableRowPinning, row as any);
 

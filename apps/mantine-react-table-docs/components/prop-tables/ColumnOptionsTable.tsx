@@ -1,6 +1,10 @@
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
-import { MantineReactTable, type MRT_ColumnDef } from 'mantine-react-table-open';
+import {
+  MantineReactTable,
+  type MRT_ColumnDef,
+  type MRT_ColumnPinningState,
+} from 'mantine-react-table-open';
 import { Anchor, Text } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 import { type ColumnOption, columnOptions } from './columnOptions';
@@ -97,17 +101,17 @@ const ColumnOptionsTable = ({ onlyOptions }: Props) => {
     [],
   );
 
-  const [columnPinning, setColumnPinning] = useState({});
+  const [columnPinning, setColumnPinning] = useState<MRT_ColumnPinningState>({ end: [], start: [] });
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
       if (isDesktop) {
         setColumnPinning({
-          left: ['mrt-row-expand', 'mrt-row-numbers', 'columnOption'],
-          right: ['link'],
+          start: ['mrt-row-expand', 'mrt-row-numbers', 'columnOption'],
+          end: ['link'],
         });
       } else {
-        setColumnPinning({});
+        setColumnPinning({ end: [], start: [] });
       }
     }
   }, [isDesktop]);

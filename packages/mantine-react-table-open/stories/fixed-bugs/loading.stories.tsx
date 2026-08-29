@@ -221,7 +221,7 @@ export const EmptyDatasetWithLoadingState = () => {
   const columns = useMemo<MRT_ColumnDef<Person>[]>(
     () => [
       {
-        accessorFn: (row) => row.name.firstName,
+        accessorFn: (row) => row.name?.firstName,
         header: 'First Name',
       },
       {

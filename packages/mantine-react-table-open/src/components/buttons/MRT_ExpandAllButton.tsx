@@ -15,21 +15,20 @@ export const MRT_ExpandAllButton = <TData extends MRT_RowData>({
   table,
   ...rest
 }: Props<TData>) => {
-  'use no memo';
   const {
     getCanSomeRowsExpand,
     getIsAllRowsExpanded,
     getIsSomeRowsExpanded,
-    getState,
     options: {
       icons: { IconChevronsDown },
       localization,
       mantineExpandAllButtonProps,
       renderDetailPanel,
     },
+    state,
     toggleAllRowsExpanded,
   } = table;
-  const { density, isLoading } = getState();
+  const { density, isLoading } = state;
 
   const actionIconProps = {
     ...parseFromValuesOrFunc(mantineExpandAllButtonProps, {

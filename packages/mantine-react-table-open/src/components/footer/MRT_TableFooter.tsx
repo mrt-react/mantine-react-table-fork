@@ -23,14 +23,13 @@ export const MRT_TableFooter = <TData extends MRT_RowData>({
   table,
   ...rest
 }: Props<TData>) => {
-  'use no memo';
   const {
     getFooterGroups,
-    getState,
     options: { enableStickyFooter, layoutMode, mantineTableFooterProps },
     refs: { tableFooterRef },
+    state,
   } = table;
-  const { isFullScreen } = getState();
+  const { isFullScreen } = state;
 
   const tableFooterProps = {
     ...parseFromValuesOrFunc(mantineTableFooterProps, {

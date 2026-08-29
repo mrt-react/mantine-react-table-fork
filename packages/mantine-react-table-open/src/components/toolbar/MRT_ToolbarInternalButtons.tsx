@@ -19,7 +19,6 @@ export const MRT_ToolbarInternalButtons = <TData extends MRT_RowData>({
   table,
   ...rest
 }: Props<TData>) => {
-  'use no memo';
   const {
     options: {
       columnFilterDisplayMode,

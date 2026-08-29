@@ -14,6 +14,7 @@ export default [
       '@mantine/hooks',
       '@tabler/icons-react',
       '@tanstack/match-sorter-utils',
+      '@tanstack/react-store',
       '@tanstack/react-table',
       '@tanstack/react-virtual',
       'clsx',
@@ -22,11 +23,6 @@ export default [
     ],
     input: './src/index.ts',
     output: [
-      {
-        file: `./${pkg.main}`,
-        format: 'cjs',
-        sourcemap: true,
-      },
       {
         file: `./${pkg.module}`,
         format: 'esm',
@@ -47,10 +43,7 @@ export default [
   },
   {
     input: './dist/types/index.d.ts',
-    output: [
-      { file: `./dist/index.d.cts`, format: 'cjs' },
-      { file: './dist/index.esm.d.mts', format: 'esm' },
-    ],
+    output: [{ file: './dist/index.esm.d.mts', format: 'esm' }],
     plugins: [
       copy({
         hook: 'buildStart',

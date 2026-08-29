@@ -17,12 +17,11 @@ export const MRT_ProgressBar = <TData extends MRT_RowData>({
   table,
   ...rest
 }: Props<TData>) => {
-  'use no memo';
   const {
-    getState,
     options: { mantineProgressProps },
+    state,
   } = table;
-  const { isSaving, showProgressBars } = getState();
+  const { isSaving, showProgressBars } = state;
 
   const linearProgressProps = {
     ...parseFromValuesOrFunc(mantineProgressProps, {

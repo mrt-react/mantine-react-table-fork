@@ -44,10 +44,8 @@ export const MRT_TableHeadCell = <TData extends MRT_RowData>({
   table,
   ...rest
 }: Props<TData>) => {
-  'use no memo';
   const direction = useDirection();
   const {
-    getState,
     options: {
       columnFilterDisplayMode,
       columnResizeDirection,
@@ -64,9 +62,9 @@ export const MRT_TableHeadCell = <TData extends MRT_RowData>({
     },
     refs: { tableHeadCellRefs },
     setHoveredColumn,
+    state,
   } = table;
-  const { columnSizingInfo, draggingColumn, grouping, hoveredColumn } =
-    getState();
+  const { columnResizing, draggingColumn, grouping, hoveredColumn } = state;
   const { column } = header;
   const { columnDef } = column;
   const { columnDefType } = columnDef;
@@ -162,32 +160,53 @@ export const MRT_TableHeadCell = <TData extends MRT_RowData>({
       colSpan={header.colSpan}
       data-column-pinned={isColumnPinned || undefined}
       data-dragging-column={isDraggingColumn || undefined}
+      data-first-end-pinned={
+        (isColumnPinned === 'end' && column.getIsFirstColumn(isColumnPinned)) ||
+        undefined
+      }
+      // deprecated v8 name, kept for consumer CSS compat
       data-first-right-pinned={
-        (isColumnPinned === 'right' &&
-          column.getIsFirstColumn(isColumnPinned)) ||
+        (isColumnPinned === 'end' && column.getIsFirstColumn(isColumnPinned)) ||
         undefined
       }
       data-hovered-column-target={isHoveredColumn || undefined}
       data-index={renderedHeaderIndex}
+      // deprecated v8 name, kept for consumer CSS compat
       data-last-left-pinned={
-        (isColumnPinned === 'left' && column.getIsLastColumn(isColumnPinned)) ||
+        (isColumnPinned === 'start' &&
+          column.getIsLastColumn(isColumnPinned)) ||
+        undefined
+      }
+      data-last-start-pinned={
+        (isColumnPinned === 'start' &&
+          column.getIsLastColumn(isColumnPinned)) ||
         undefined
       }
       data-resizing={
         (columnResizeMode === 'onChange' &&
-          columnSizingInfo?.isResizingColumn === column.id &&
+          columnResizing?.isResizingColumn === column.id &&
           columnResizeDirection) ||
         undefined
       }
       {...tableCellProps}
       __vars={{
+        '--mrt-table-cell-end':
+          isColumnPinned === 'end'
+            ? `${column.getAfter(isColumnPinned)}`
+            : undefined,
+        // deprecated v8 name, kept for consumer CSS compat
         '--mrt-table-cell-left':
-          isColumnPinned === 'left'
+          isColumnPinned === 'start'
             ? `${column.getStart(isColumnPinned)}`
             : undefined,
+        // deprecated v8 name, kept for consumer CSS compat
         '--mrt-table-cell-right':
-          isColumnPinned === 'right'
+          isColumnPinned === 'end'
             ? `${column.getAfter(isColumnPinned)}`
+            : undefined,
+        '--mrt-table-cell-start':
+          isColumnPinned === 'start'
+            ? `${column.getStart(isColumnPinned)}`
             : undefined,
       }}
       align={

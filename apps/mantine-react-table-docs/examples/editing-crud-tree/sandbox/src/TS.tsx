@@ -236,7 +236,7 @@ const Example = () => {
       </Button>
     ),
     initialState: {
-      columnPinning: { left: ['mrt-row-actions'], right: [] },
+      columnPinning: { end: [], start: ['mrt-row-actions'] },
       expanded: true,
       pagination: { pageSize: 20, pageIndex: 0 },
     },

@@ -36,9 +36,7 @@ export const MRT_TableDetailPanel = <TData extends MRT_RowData>({
   virtualRow,
   ...rest
 }: Props<TData>) => {
-  'use no memo';
   const {
-    getState,
     getVisibleLeafColumns,
     options: {
       layoutMode,
@@ -46,8 +44,9 @@ export const MRT_TableDetailPanel = <TData extends MRT_RowData>({
       mantineTableBodyRowProps,
       renderDetailPanel,
     },
+    state,
   } = table;
-  const { isLoading } = getState();
+  const { isLoading } = state;
 
   const tableRowProps = parseFromValuesOrFunc(mantineTableBodyRowProps, {
     isDetailPanel: true,

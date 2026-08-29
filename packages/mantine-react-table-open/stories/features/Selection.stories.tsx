@@ -6,6 +6,7 @@ import {
   getMRT_RowSelectionHandler,
   MantineReactTable,
   type MRT_ColumnDef,
+  type MRT_RowSelectionState,
   MRT_SelectCheckbox,
 } from '../../src';
 
@@ -116,7 +117,7 @@ export const SelectionEnabledWithRowClick = () => (
     enableRowSelection
     mantineTableBodyRowProps={({ renderedRowIndex, row, table }) => ({
       onClick: (event) =>
-        getMRT_RowSelectionHandler()({ event, renderedRowIndex, row, table }),
+        getMRT_RowSelectionHandler({ renderedRowIndex, row, table })(event),
       style: {
         cursor: 'pointer',
         userSelect: 'none',
@@ -126,7 +127,7 @@ export const SelectionEnabledWithRowClick = () => (
 );
 
 export const ManualSelection = () => {
-  const [rowSelection, setRowSelection] = useState<Record<string, boolean>>({});
+  const [rowSelection, setRowSelection] = useState<MRT_RowSelectionState>({});
 
   console.info(rowSelection);
 
@@ -136,11 +137,16 @@ export const ManualSelection = () => {
       data={data}
       mantineTableBodyRowProps={({ row }) => ({
         onClick: () =>
-          setRowSelection((prev) => ({
-            ...prev,
-            [row.id]: !prev[row.id],
-          })),
-        selected: rowSelection[row.id],
+          setRowSelection((prev) => {
+            const next = { ...prev };
+            if (next[row.id]) {
+              delete next[row.id];
+            } else {
+              next[row.id] = true;
+            }
+            return next;
+          }),
+        selected: !!rowSelection[row.id],
         style: {
           cursor: 'pointer',
         },

@@ -1,15 +1,14 @@
 import { type JSX, type ReactNode } from 'react';
 
 import {
-  createRow as _createRow,
+  constructRow as _createRow,
   flexRender as _flexRender,
   type Renderable,
 } from '@tanstack/react-table';
 
 import {
+  type MRT_ColumnDef,
   type MRT_ColumnHelper,
-  type MRT_DisplayColumnDef,
-  type MRT_GroupColumnDef,
   type MRT_Row,
   type MRT_RowData,
   type MRT_TableInstance,
@@ -31,13 +30,16 @@ export function createMRTColumnHelper<
             ...column,
             accessorFn: accessor,
           } as any)
-        : {
+        : ({
             ...column,
             accessorKey: accessor,
-          };
+          } as any);
     },
-    display: (column) => column as MRT_DisplayColumnDef<TData>,
-    group: (column) => column as MRT_GroupColumnDef<TData>,
+    columns: <TColumns extends readonly MRT_ColumnDef<TData, any>[]>(
+      columns: [...TColumns],
+    ): [...TColumns] & MRT_ColumnDef<TData, any>[] => columns,
+    display: (column) => column,
+    group: (column) => column,
   };
 }
 

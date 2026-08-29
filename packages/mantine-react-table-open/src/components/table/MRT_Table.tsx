@@ -28,10 +28,8 @@ export const MRT_Table = <TData extends MRT_RowData>({
   table,
   ...rest
 }: Props<TData>) => {
-  'use no memo';
   const {
     getFlatHeaders,
-    getState,
     options: {
       columns,
       enableTableFooter,
@@ -40,9 +38,9 @@ export const MRT_Table = <TData extends MRT_RowData>({
       mantineTableProps,
       memoMode,
     },
+    state,
   } = table;
-  const { columnSizing, columnSizingInfo, columnVisibility, density } =
-    getState();
+  const { columnResizing, columnSizing, columnVisibility, density } = state;
 
   const tableProps = {
     highlightOnHover: true,
@@ -62,7 +60,7 @@ export const MRT_Table = <TData extends MRT_RowData>({
       colSizes[`--col-${parseCSSVarId(header.column.id)}-size`] = colSize;
     }
     return colSizes;
-  }, [columns, columnSizing, columnSizingInfo, columnVisibility]);
+  }, [columns, columnSizing, columnResizing, columnVisibility]);
 
   const columnVirtualizer = useMRT_ColumnVirtualizer(table);
 
@@ -96,7 +94,7 @@ export const MRT_Table = <TData extends MRT_RowData>({
       }}
     >
       {enableTableHead && <MRT_TableHead {...commonTableGroupProps} />}
-      {memoMode === 'table-body' || columnSizingInfo.isResizingColumn ? (
+      {memoMode === 'table-body' || columnResizing.isResizingColumn ? (
         <Memo_MRT_TableBody
           {...commonTableGroupProps}
           tableProps={tableProps}

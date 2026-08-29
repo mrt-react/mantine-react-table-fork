@@ -42,10 +42,8 @@ export const MRT_ShowHideColumnsMenuItems = <TData extends MRT_RowData>({
   setHoveredColumn,
   table,
 }: Props<TData>) => {
-  'use no memo';
   const theme = useMantineTheme();
   const {
-    getState,
     options: {
       enableColumnOrdering,
       enableColumnPinning,
@@ -53,8 +51,9 @@ export const MRT_ShowHideColumnsMenuItems = <TData extends MRT_RowData>({
       localization,
     },
     setColumnOrder,
+    state,
   } = table;
-  const { columnOrder } = getState();
+  const { columnOrder } = state;
   const { columnDef } = column;
   const { columnDefType } = columnDef;
 
@@ -73,7 +72,7 @@ export const MRT_ShowHideColumnsMenuItems = <TData extends MRT_RowData>({
     }
   };
 
-  const menuItemRef = useRef<HTMLElement | null>(null);
+  const menuItemRef = useRef<HTMLElement>(null);
 
   const [isDragging, setIsDragging] = useState(false);
 
@@ -106,7 +105,7 @@ export const MRT_ShowHideColumnsMenuItems = <TData extends MRT_RowData>({
         className={classes.root}
         component="span"
         onDragEnter={handleDragEnter}
-        ref={menuItemRef as any}
+        ref={menuItemRef}
         style={{
           '--_column-depth': `${(column.depth + 0.5) * 2}rem`,
           '--_hover-color': getPrimaryColor(theme),

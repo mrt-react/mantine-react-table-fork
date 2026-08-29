@@ -30,11 +30,9 @@ export const MRT_ToolbarAlertBanner = <TData extends MRT_RowData>({
   table,
   ...rest
 }: Props<TData>) => {
-  'use no memo';
   const {
     getFilteredSelectedRowModel,
-    getPrePaginationRowModel,
-    getState,
+    getPrePaginatedRowModel,
     options: {
       enableRowSelection,
       enableSelectAll,
@@ -47,8 +45,9 @@ export const MRT_ToolbarAlertBanner = <TData extends MRT_RowData>({
       renderToolbarAlertBannerContent,
       rowCount,
     },
+    state,
   } = table;
-  const { density, grouping, rowSelection, showAlertBanner } = getState();
+  const { density, grouping, rowSelection, showAlertBanner } = state;
 
   const alertProps = {
     ...parseFromValuesOrFunc(mantineToolbarAlertBannerProps, {
@@ -61,7 +60,7 @@ export const MRT_ToolbarAlertBanner = <TData extends MRT_RowData>({
     { table },
   );
 
-  const totalRowCount = rowCount ?? getPrePaginationRowModel().flatRows.length;
+  const totalRowCount = rowCount ?? getPrePaginatedRowModel().flatRows.length;
 
   const selectedRowCount = useMemo(
     () =>

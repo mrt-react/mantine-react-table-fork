@@ -1,5 +1,3 @@
-import { type Row } from '@tanstack/react-table';
-
 import {
   type MRT_Column,
   type MRT_ColumnDef,
@@ -9,6 +7,7 @@ import {
   type MRT_FilterOption,
   type MRT_RowData,
 } from '../types';
+import { coerceAggregationFn, getColumnSortFn } from './compat.utils';
 
 export const getColumnId = <TData extends MRT_RowData>(
   columnDef: MRT_ColumnDef<TData>,
@@ -43,7 +42,7 @@ export const prepareColumns = <TData extends MRT_RowData>({
     aggregationFns = {},
     defaultDisplayColumn,
     filterFns = {},
-    sortingFns = {},
+    sortFns = {},
     state: { columnFilterFns = {} } = {},
   } = tableOptions;
   return columnDefs.map((columnDef) => {
@@ -59,19 +58,6 @@ export const prepareColumns = <TData extends MRT_RowData>({
         tableOptions,
       });
     } else if (columnDef.columnDefType === 'data') {
-      //assign aggregationFns if multiple aggregationFns are provided
-      if (Array.isArray(columnDef.aggregationFn)) {
-        const aggFns = columnDef.aggregationFn as string[];
-        columnDef.aggregationFn = (
-          columnId: string,
-          leafRows: Row<TData>[],
-          childRows: Row<TData>[],
-        ) =>
-          aggFns.map((fn) =>
-            aggregationFns[fn]?.(columnId, leafRows, childRows),
-          );
-      }
-
       //assign filterFns
       if (Object.keys(filterFns).includes(columnFilterFns[columnDef.id])) {
         columnDef.filterFn =
@@ -80,10 +66,24 @@ export const prepareColumns = <TData extends MRT_RowData>({
           columnFilterFns[columnDef.id];
       }
 
-      //assign sortingFns
-      if (Object.keys(sortingFns).includes(columnDef.sortingFn as string)) {
-        // @ts-ignore
-        columnDef.sortingFn = sortingFns[columnDef.sortingFn];
+      //assign sortFns (accepting the v8 `sortingFn` spelling). Never assign
+      //undefined: an own `sortFn: undefined` property would win over v9's
+      //default sortFn 'auto' in constructColumn's spread merge and silently
+      //disable sorting for the column
+      const resolvedSortFn = getColumnSortFn(columnDef);
+      if (resolvedSortFn !== undefined && columnDef.sortFn === undefined) {
+        columnDef.sortFn = resolvedSortFn;
+      }
+      if (Object.keys(sortFns).includes(columnDef.sortFn as string)) {
+        columnDef.sortFn = sortFns[columnDef.sortFn as string];
+      }
+
+      //coerce v8-style aggregation fns (bare functions, positional arrays)
+      if (columnDef.aggregationFn !== undefined) {
+        columnDef.aggregationFn = coerceAggregationFn(
+          columnDef.aggregationFn,
+          aggregationFns,
+        ) as typeof columnDef.aggregationFn;
       }
     } else if (columnDef.columnDefType === 'display') {
       columnDef = {

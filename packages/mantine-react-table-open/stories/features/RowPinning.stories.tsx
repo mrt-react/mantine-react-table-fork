@@ -247,10 +247,11 @@ export const RowAndColumnPinning = () => (
     enableRowPinning
     initialState={{
       columnPinning: {
-        left: ['firstName'],
-        right: ['lastName'],
+        end: ['lastName'],
+        start: ['firstName'],
       },
       rowPinning: {
+        bottom: [],
         top: ['3', '5'],
       },
     }}

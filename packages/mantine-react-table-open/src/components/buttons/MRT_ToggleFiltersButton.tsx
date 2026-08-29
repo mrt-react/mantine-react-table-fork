@@ -14,18 +14,17 @@ interface Props<TData extends MRT_RowData>
 
 export const MRT_ToggleFiltersButton = <TData extends MRT_RowData>({
   table: {
-    getState,
     options: {
       icons: { IconFilter, IconFilterOff },
       localization: { showHideFilters },
     },
     setShowColumnFilters,
+    state,
   },
   title,
   ...rest
 }: Props<TData>) => {
-  'use no memo';
-  const { showColumnFilters } = getState();
+  const { showColumnFilters } = state;
 
   return (
     <Tooltip label={title ?? showHideFilters} withinPortal>

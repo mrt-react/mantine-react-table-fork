@@ -20,10 +20,8 @@ export const useMRT_RowVirtualizer = <
   table: MRT_TableInstance<TData>,
   rows?: MRT_Row<TData>[],
 ): MRT_RowVirtualizer<TScrollElement, TItemElement> | undefined => {
-  'use no memo';
   const {
     getRowModel,
-    getState,
     options: {
       enableRowVirtualization,
       renderDetailPanel,
@@ -31,8 +29,9 @@ export const useMRT_RowVirtualizer = <
       rowVirtualizerOptions,
     },
     refs: { tableContainerRef },
+    state,
   } = table;
-  const { density, draggingRow, expanded } = getState();
+  const { density, draggingRow, expanded } = state;
 
   if (!enableRowVirtualization) return undefined;
 
@@ -84,7 +83,7 @@ export const useMRT_RowVirtualizer = <
     ...rowVirtualizerProps,
   }) as unknown as MRT_RowVirtualizer<TScrollElement, TItemElement>;
 
-  rowVirtualizer.virtualRows = rowVirtualizer.getVirtualItems() as any;
+  rowVirtualizer.virtualRows = rowVirtualizer.getVirtualItems();
 
   if (rowVirtualizerInstanceRef) {
     //@ts-ignore

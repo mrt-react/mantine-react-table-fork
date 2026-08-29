@@ -118,7 +118,7 @@ const Example = () => {
             id: 'startDate',
             header: 'Start Date',
             filterVariant: 'date-range',
-            sortingFn: 'datetime',
+            sortFn: 'datetime',
             enableColumnFilterModes: false, //keep this as only date-range filter with between inclusive filterFn
             Cell: ({ cell }) => cell.getValue<Date>()?.toLocaleDateString(), //render Date as a string
             Header: ({ column }) => <em>{column.columnDef.header}</em>, //custom header markup

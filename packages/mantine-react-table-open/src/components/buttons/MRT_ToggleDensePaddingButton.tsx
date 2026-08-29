@@ -23,7 +23,6 @@ const next: Record<TogglableDensityState, TogglableDensityState> = {
 
 export const MRT_ToggleDensePaddingButton = <TData extends MRT_RowData>({
   table: {
-    getState,
     options: {
       icons: {
         IconBaselineDensityLarge,
@@ -33,12 +32,12 @@ export const MRT_ToggleDensePaddingButton = <TData extends MRT_RowData>({
       localization: { toggleDensity },
     },
     setDensity,
+    state,
   },
   title,
   ...rest
 }: Props<TData>) => {
-  'use no memo';
-  const { density } = getState();
+  const { density } = state;
 
   return (
     <Tooltip label={title ?? toggleDensity} withinPortal>
