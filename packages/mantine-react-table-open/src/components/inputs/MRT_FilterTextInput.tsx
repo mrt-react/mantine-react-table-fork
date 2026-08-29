@@ -299,6 +299,7 @@ export const MRT_FilterTextInput = <TData extends MRT_RowData>({
         searchable
         {...multiSelectProps}
         className={clsx(className, multiSelectProps.className)}
+        clearable={false}
         data={filterSelectOptions}
         onChange={(value) => setFilterValue(value)}
         ref={(node) => {
@@ -315,6 +316,7 @@ export const MRT_FilterTextInput = <TData extends MRT_RowData>({
             ? ClearButton
             : undefined
         }
+        rightSectionPointerEvents="all"
         style={commonProps.style}
       />
     );

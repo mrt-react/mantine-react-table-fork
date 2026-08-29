@@ -10,7 +10,6 @@ import {
 
 import {
   Box,
-  Menu,
   Switch,
   Text,
   Tooltip,
@@ -102,7 +101,7 @@ export const MRT_ShowHideColumnsMenuItems = <TData extends MRT_RowData>({
 
   return (
     <>
-      <Menu.Item
+      <Box
         className={classes.root}
         component="span"
         onDragEnter={handleDragEnter}
@@ -153,7 +152,7 @@ export const MRT_ShowHideColumnsMenuItems = <TData extends MRT_RowData>({
             <Text className={classes.header}>{columnDef.header}</Text>
           )}
         </Box>
-      </Menu.Item>
+      </Box>
       {column.columns?.map((c: MRT_Column<TData>, i) => (
         <MRT_ShowHideColumnsMenuItems
           allColumns={allColumns}
