@@ -35,7 +35,18 @@
       "default": "./dist/index.esm.mjs"
     },
     "./package.json": "./package.json",
-    "./locales/*": "./locales/*",
+    "./locales/*/index.esm.mjs": "./locales/*/index.esm.mjs",
+    "./locales/*/index.cjs": "./locales/*/index.cjs",
+    "./locales/*": {
+      "import": {
+        "types": "./locales/*/index.esm.d.mts",
+        "default": "./locales/*/index.esm.mjs"
+      },
+      "require": {
+        "types": "./locales/*/index.d.cts",
+        "default": "./locales/*/index.cjs"
+      }
+    },
     "./styles.css": "./styles.css"
   },
   "files": [

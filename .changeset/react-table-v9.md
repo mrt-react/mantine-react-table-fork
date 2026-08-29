@@ -8,6 +8,8 @@ The table is now built on TanStack Store (`useTable` + store atoms) instead of `
 
 A compatibility layer preserves most v8-era APIs: `left`/`right` pinning inputs, the `columnSizingInfo` state key and `onColumnSizingInfoChange`, `sortingFn`/`sortingFns`, v8-style aggregation functions and positional array aggregations, renamed instance getters (`getPaginationRowModel`, `getPrePaginationRowModel`, `getLeftLeafColumns`, ...), v8 CSS variables and pinning data attributes, and deprecated type aliases.
 
+Also fixed: locale subpath imports (`mantine-react-table-open/locales/fr`) now resolve in Node ESM and strict bundlers — the exports map previously pointed at a directory, which the ESM resolver rejects.
+
 Remaining breaking changes:
 
 - **ESM-only.** The CommonJS build is dropped and the package now requires Node >= 20, matching `@tanstack/react-table` v9 (which is ESM-only upstream).
