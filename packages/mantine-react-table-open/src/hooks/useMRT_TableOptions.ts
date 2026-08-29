@@ -24,7 +24,10 @@ import {
   type MRT_RowData,
   type MRT_TableOptions,
 } from '../types';
-import { stripLegacyRowModelOptions } from '../utils/compat.utils';
+import {
+  coerceAggregationRegistry,
+  stripLegacyRowModelOptions,
+} from '../utils/compat.utils';
 
 export const MRT_DefaultColumn = {
   filterVariant: 'text',
@@ -140,7 +143,8 @@ export const useMRT_TableOptions: <TData extends MRT_RowData>(
     [localization],
   );
   aggregationFns = useMemo(
-    () => ({ ...MRT_RowAggregationFns, ...aggregationFns }),
+    //coerce v8-style bare-function registry entries into v9 AggregationFnDefs
+    () => coerceAggregationRegistry({ ...MRT_RowAggregationFns, ...aggregationFns }),
     [],
   );
   filterFns = useMemo(
@@ -239,34 +243,26 @@ export const useMRT_TableOptions: <TData extends MRT_RowData>(
     enableTableHead,
     enableToolbarInternalActions,
     enableTopToolbar,
+    //v9 freezes `features` (and the fn registries) at table construction -
+    //table_mergeOptions pins them to the construction-time object forever.
+    //Register everything unconditionally: the enable*/manual* options are
+    //checked by v9 at call time, and gating here would permanently disable
+    //row models for any table whose FIRST render had them off (e.g. the
+    //standard async pattern of mounting with data: [] forces manual* on,
+    //which would otherwise freeze the table with no client-side row models)
     features: {
       ...stockFeatures,
-      ...((enableColumnFilters || enableGlobalFilter || enableFilters) &&
-      !manualFiltering
-        ? { filteredRowModel: createFilteredRowModel(), filterFns }
-        : {}),
-      ...(enableSorting && !manualSorting
-        ? { sortedRowModel: createSortedRowModel(), sortFns }
-        : {}),
-      ...(enablePagination && !manualPagination
-        ? { paginatedRowModel: createPaginatedRowModel() }
-        : {}),
-      ...(enableExpanding || enableGrouping
-        ? { expandedRowModel: createExpandedRowModel() }
-        : {}),
-      ...(enableGrouping && !manualGrouping
-        ? {
-            aggregationFns,
-            groupedRowModel: createGroupedRowModel(),
-          }
-        : {}),
-      ...(enableFacetedValues
-        ? {
-            facetedMinMaxValues: createFacetedMinMaxValues(),
-            facetedRowModel: createFacetedRowModel(),
-            facetedUniqueValues: createFacetedUniqueValues(),
-          }
-        : {}),
+      aggregationFns,
+      expandedRowModel: createExpandedRowModel(),
+      facetedMinMaxValues: createFacetedMinMaxValues(),
+      facetedRowModel: createFacetedRowModel(),
+      facetedUniqueValues: createFacetedUniqueValues(),
+      filteredRowModel: createFilteredRowModel(),
+      filterFns,
+      groupedRowModel: createGroupedRowModel(),
+      paginatedRowModel: createPaginatedRowModel(),
+      sortedRowModel: createSortedRowModel(),
+      sortFns,
     },
     filterFns,
     getSubRows: (row: TData) => (row as any)?.subRows,

@@ -66,9 +66,13 @@ export const prepareColumns = <TData extends MRT_RowData>({
           columnFilterFns[columnDef.id];
       }
 
-      //assign sortFns (accepting the v8 `sortingFn` spelling)
-      if (columnDef.sortFn === undefined) {
-        columnDef.sortFn = getColumnSortFn(columnDef);
+      //assign sortFns (accepting the v8 `sortingFn` spelling). Never assign
+      //undefined: an own `sortFn: undefined` property would win over v9's
+      //default sortFn 'auto' in constructColumn's spread merge and silently
+      //disable sorting for the column
+      const resolvedSortFn = getColumnSortFn(columnDef);
+      if (resolvedSortFn !== undefined && columnDef.sortFn === undefined) {
+        columnDef.sortFn = resolvedSortFn;
       }
       if (Object.keys(sortFns).includes(columnDef.sortFn as string)) {
         columnDef.sortFn = sortFns[columnDef.sortFn as string];

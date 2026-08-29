@@ -31,9 +31,11 @@ import {
 import {
   applyColumnPinCompat,
   applyLegacyInstanceAliases,
+  applyPinSetterCompat,
   coerceColumnPinning,
   coerceRowPinning,
   coerceRowSelection,
+  syncControlledAtomState,
 } from '../utils/compat.utils';
 import {
   getDefaultColumnOrderIds,
@@ -54,6 +56,32 @@ import { getMRT_RowPinningColumnDef } from './display-columns/getMRT_RowPinningC
 import { getMRT_RowSelectColumnDef } from './display-columns/getMRT_RowSelectColumnDef';
 import { getMRT_RowSpacerColumnDef } from './display-columns/getMRT_RowSpacerColumnDef';
 import { useMRT_Effects } from './useMRT_Effects';
+
+//state slices that only MRT (not TanStack Table v9) knows about - when the
+//consumer controls one of these via options.state it must win over the
+//internal atom value, as options.state did in v8
+const MRT_ONLY_STATE_KEYS = [
+  'columnFilterFns',
+  'creatingRow',
+  'density',
+  'draggingColumn',
+  'draggingRow',
+  'editingCell',
+  'editingRow',
+  'globalFilterFn',
+  'hoveredColumn',
+  'hoveredRow',
+  'isFullScreen',
+  'isLoading',
+  'isSaving',
+  'showAlertBanner',
+  'showColumnFilters',
+  'showGlobalFilter',
+  'showLoadingOverlay',
+  'showProgressBars',
+  'showSkeletons',
+  'showToolbarDropZone',
+] as const;
 
 /**
  * The MRT hook that wraps the TanStack useTable hook and adds additional functionality
@@ -103,18 +131,37 @@ export const useMRT_TableInstance = <TData extends MRT_RowData>(
 
   definedTableOptions.initialState = initialState;
 
+  //the consumer's controlled state, before MRT merges its own slices in
+  const consumerState = definedTableOptions.state;
+
   const columnOrderAtom = useCreateAtom<MRT_ColumnOrderState>(
-    initialState.columnOrder ?? [],
+    consumerState?.columnOrder ?? initialState.columnOrder ?? [],
   );
   const columnResizingAtom = useCreateAtom<MRT_ColumnResizingState>(
-    initialState.columnResizing ?? ({} as MRT_ColumnResizingState),
+    consumerState?.columnResizing ??
+      (consumerState as any)?.columnSizingInfo ??
+      initialState.columnResizing ??
+      ({} as MRT_ColumnResizingState),
   );
   const groupingAtom = useCreateAtom<MRT_GroupingState>(
-    initialState.grouping ?? [],
+    consumerState?.grouping ?? initialState.grouping ?? [],
   );
   const paginationAtom = useCreateAtom<MRT_PaginationState>(
-    initialState?.pagination ?? { pageIndex: 0, pageSize: 10 },
+    consumerState?.pagination ??
+      initialState?.pagination ?? { pageIndex: 0, pageSize: 10 },
   );
+
+  //v9 ignores options.state for atom-backed keys, so controlled state must
+  //be pushed into the atoms every render (no-op when unchanged)
+  if (consumerState) {
+    syncControlledAtomState(columnOrderAtom, consumerState.columnOrder);
+    syncControlledAtomState(
+      columnResizingAtom as any,
+      consumerState.columnResizing ?? (consumerState as any).columnSizingInfo,
+    );
+    syncControlledAtomState(groupingAtom, consumerState.grouping);
+    syncControlledAtomState(paginationAtom, consumerState.pagination);
+  }
 
   const columnOrder = useSelector(columnOrderAtom);
   const columnResizing = useSelector(columnResizingAtom);
@@ -231,11 +278,8 @@ export const useMRT_TableInstance = <TData extends MRT_RowData>(
     if (optionState.rowSelection) {
       optionState.rowSelection = coerceRowSelection(optionState.rowSelection);
     }
-    //columnResizing is always pre-filled from the atom, so a consumer
-    //controlling state via the legacy columnSizingInfo key must win over it
-    if (optionState.columnSizingInfo) {
-      optionState.columnResizing = optionState.columnSizingInfo;
-    }
+    //(legacy columnSizingInfo is handled by the atom sync above - v9 ignores
+    //options.state for atom-backed keys)
   }
 
   //The table options now include all state needed to help determine column visibility and order logic
@@ -383,10 +427,26 @@ export const useMRT_TableInstance = <TData extends MRT_RowData>(
     showGlobalFilter,
     showToolbarDropZone,
   };
+  //controlled MRT-only state slices come from the consumer, not the atoms
+  //(matching v8, where options.state always won over internal state)
+  if (consumerState) {
+    for (const key of MRT_ONLY_STATE_KEYS) {
+      if (consumerState[key] !== undefined) {
+        (mergedState as any)[key] = consumerState[key];
+      }
+    }
+  }
   //deprecated v8 mirror of the renamed columnResizing state key
   (mergedState as any).columnSizingInfo = mergedState.columnResizing;
 
-  const refs = {
+  //getState must stay live for consumers that captured an older wrapper
+  //(refs, empty-deps effects, context) - v8's single stable instance had an
+  //always-current getState, so route every wrapper through one ref
+  const mergedStateRef = useRef(mergedState);
+  mergedStateRef.current = mergedState;
+  const getState = useRef(() => mergedStateRef.current).current;
+
+  const refs = useRef({
     bottomToolbarRef,
     editInputRefs,
     filterInputRefs,
@@ -398,7 +458,7 @@ export const useMRT_TableInstance = <TData extends MRT_RowData>(
     tableHeadRef,
     tablePaperRef,
     topToolbarRef,
-  };
+  }).current;
 
   const setCreatingRow = (row: MRT_Updater<MRT_Row<TData> | null | true>) => {
     let _row = row;
@@ -427,7 +487,7 @@ export const useMRT_TableInstance = <TData extends MRT_RowData>(
 
   for (const instance of tableInstances) {
     instance.state = mergedState;
-    instance.getState = () => mergedState;
+    instance.getState = getState;
     instance.refs = refs;
     instance.setCreatingRow = setCreatingRow;
     instance.setColumnFilterFns =
@@ -467,8 +527,10 @@ export const useMRT_TableInstance = <TData extends MRT_RowData>(
     applyLegacyInstanceAliases(instance);
   }
 
-  //accept v8-style column.pin('left'/'right') calls
+  //accept v8-style column.pin('left'/'right') calls and v8-shaped/partial
+  //values through the table-level pinning setters
   applyColumnPinCompat(table);
+  applyPinSetterCompat(tableInstances);
 
   useMRT_Effects(table);
 
