@@ -8,7 +8,7 @@ View the [Docs Site](https://www.mantine-react-table.com/)
 
 ### _Quickly Create React Data Tables with Mantine_
 
-### __Built with [Mantine <sup>V8 & V9</sup>](https://mantine.dev/) and [TanStack Table <sup>V8</sup>](https://tanstack.com/table/v8)__
+### __Built with [Mantine <sup>V8 & V9</sup>](https://mantine.dev/) and [TanStack Table <sup>V9</sup>](https://tanstack.com/table/v9)__
 
 <img src="https://mantine-react-table.com/banner.png" alt="MRT" height="50"/>
 

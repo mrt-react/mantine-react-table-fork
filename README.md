@@ -4,15 +4,11 @@
 
 View the [Docs Site](https://www.mantine-react-table.com/)
 
-## Versioning
-
-Starting with v10, the package version no longer tracks Mantine's major version. v10 targets Mantine 9 and adopts [TanStack Table V9](https://tanstack.com/table/v9) under the hood.
-
 ## About
 
 ### _Quickly Create React Data Tables with Mantine_
 
-### __Built with [Mantine <sup>V8 & V9</sup>](https://mantine.dev/) and [TanStack Table <sup>V8</sup>](https://tanstack.com/table/v8)__
+### __Built with [Mantine <sup>V8 & V9</sup>](https://mantine.dev/) and [TanStack Table <sup>V9</sup>](https://tanstack.com/table/v9)__
 
 <img src="https://mantine-react-table.com/banner.png" alt="MRT" height="50"/>
 
