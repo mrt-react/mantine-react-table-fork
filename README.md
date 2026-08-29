@@ -16,14 +16,17 @@ Starting with v10, the package version no longer tracks Mantine's major version.
 
 <img src="https://mantine-react-table.com/banner.png" alt="MRT" height="50"/>
 
-## Mantine Version Compatibility
+## Version Compatibility
 
-| mantine-react-table-open | Mantine | React |
-| --- | --- | --- |
-| v9.x (`latest`) | Mantine V9 | React 19+ |
-| v8.x | Mantine V8 | React 18+ |
+Two release lines are maintained. The package major no longer tracks Mantine's major version — both current lines target Mantine V9.
 
-Use `npm install mantine-react-table-open@^8` to install the Mantine V8 compatible version.
+| mantine-react-table-open | Branch | TanStack Table | Mantine | React | Install |
+| --- | --- | --- | --- | --- | --- |
+| v9.x (`latest`, stable) | `main` | V8 | Mantine V9 | React 19+ | `npm i mantine-react-table-open` |
+| v10.x (`next`) | `v10` | V9 (React Compiler support) | Mantine V9 | React 19+ | `npm i mantine-react-table-open@next` |
+| v8.x | — | V8 | Mantine V8 | React 18+ | `npm i mantine-react-table-open@^8` |
+
+The v10 line is ESM-only and requires Node >= 20; it ships a v8 compatibility layer, so most v8-era table APIs keep working.
 
 ## Learn More
 
