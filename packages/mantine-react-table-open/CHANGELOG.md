@@ -1,5 +1,11 @@
 # mantine-react-table-open
 
+## 10.0.2
+
+### Patch Changes
+
+- Automated release triggered by push to v10.
+
 ## 10.0.1
 
 ### Patch Changes
