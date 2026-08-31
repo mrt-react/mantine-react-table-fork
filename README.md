@@ -1,5 +1,7 @@
 # Mantine React Table Fork
 
+> **Before you adopt this fork:** the maintainers of the original [mantine-react-table](https://github.com/KevinVandy/mantine-react-table) are deprecating it, and their advice is to [build your own table components on TanStack Table v9](https://tanstack.com/table/latest/docs/framework/react/examples/mantine-react-table). We think that advice is right. This fork keeps compatibility with new Mantine versions so existing apps are not stranded, but we expect to stop maintaining it in 2027. If you are starting a new project, start with TanStack directly.
+
 > **Unofficial fork** of [mantine-react-table](https://github.com/KevinVandy/mantine-react-table) that provides support for Mantine V8 & V9.
 
 View the [Docs Site](https://www.mantine-react-table.com/)
