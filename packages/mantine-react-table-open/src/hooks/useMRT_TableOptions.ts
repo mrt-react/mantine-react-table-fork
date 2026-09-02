@@ -21,7 +21,9 @@ import { MRT_Default_Icons } from '../icons';
 import { MRT_Localization_EN } from '../locales/en';
 import {
   type MRT_DefinedTableOptions,
+  type MRT_Row,
   type MRT_RowData,
+  type MRT_TableInstance,
   type MRT_TableOptions,
 } from '../types';
 import {
@@ -166,6 +168,15 @@ export const useMRT_TableOptions: <TData extends MRT_RowData>(
     }),
     [defaultDisplayColumn],
   );
+  const getRowCanExpand = useMemo(
+    () => (row: MRT_Row<TData>) =>
+      !!restOptions.renderDetailPanel?.({
+        internalEditComponents: [],
+        row,
+        table: row.table as MRT_TableInstance<TData>,
+      }) || !!row.subRows?.length,
+    [restOptions.renderDetailPanel],
+  );
   //cannot be changed after initialization
   [enableColumnVirtualization, enableRowVirtualization] = useMemo(
     () => [enableColumnVirtualization, enableRowVirtualization],
@@ -265,6 +276,7 @@ export const useMRT_TableOptions: <TData extends MRT_RowData>(
       sortFns,
     },
     filterFns,
+    getRowCanExpand,
     getSubRows: (row: TData) => (row as any)?.subRows,
     icons,
     layoutMode,

@@ -17,7 +17,6 @@ import {
   type MRT_TableInstance,
 } from '../../types';
 import { parseFromValuesOrFunc } from '../../utils/utils';
-import { MRT_EditCellTextInput } from '../inputs/MRT_EditCellTextInput';
 
 interface Props<TData extends MRT_RowData> extends ActionIconProps {
   row: MRT_Row<TData>;
@@ -36,7 +35,6 @@ export const MRT_ExpandButton = <TData extends MRT_RowData>({
       localization,
       mantineExpandButtonProps,
       positionExpandColumn,
-      renderDetailPanel,
     },
   } = table;
 
@@ -48,21 +46,8 @@ export const MRT_ExpandButton = <TData extends MRT_RowData>({
     ...rest,
   };
 
-  const internalEditComponents = row
-    .getAllCells()
-    .filter((cell) => cell.column.columnDef.columnDefType === 'data')
-    .map((cell) => (
-      <MRT_EditCellTextInput cell={cell} key={cell.id} table={table} />
-    ));
-
   const canExpand = row.getCanExpand();
   const isExpanded = row.getIsExpanded();
-
-  const DetailPanel = !!renderDetailPanel?.({
-    internalEditComponents,
-    row,
-    table,
-  });
 
   const handleToggleExpand = (event: MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
@@ -74,7 +59,7 @@ export const MRT_ExpandButton = <TData extends MRT_RowData>({
 
   return (
     <Tooltip
-      disabled={!canExpand && !DetailPanel}
+      disabled={!canExpand}
       label={
         actionIconProps?.title ??
         (isExpanded ? localization.collapse : localization.expand)
@@ -85,7 +70,7 @@ export const MRT_ExpandButton = <TData extends MRT_RowData>({
       <ActionIcon
         aria-label={localization.expand}
         color="gray"
-        disabled={!canExpand && !DetailPanel}
+        disabled={!canExpand}
         variant="subtle"
         {...actionIconProps}
         __vars={{
@@ -105,7 +90,7 @@ export const MRT_ExpandButton = <TData extends MRT_RowData>({
             className={clsx(
               'mrt-expand-button-chevron',
               classes.chevron,
-              !canExpand && !renderDetailPanel
+              !canExpand
                 ? classes.right
                 : isExpanded
                   ? classes.up
